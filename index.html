@@ -15,12 +15,12 @@
   <script src="https://unpkg.com/lucide@0.292.0"></script>
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap');
     
     /* Global Styles */
     body { font-family: 'Sarabun', sans-serif; -webkit-font-smoothing: antialiased; }
+    .font-prompt { font-family: 'Prompt', sans-serif; }
     
-    /* ตั้งค่า Scroll Offset ป้องกัน Header บังเนื้อหา */
     html { 
       scroll-behavior: smooth; 
       scroll-padding-top: 100px; 
@@ -49,7 +49,6 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .animate-fade-in { animation: fadeIn 0.8s ease-out; }
 
-    /* Video Container Responsive */
     .video-container {
       position: relative;
       padding-bottom: 56.25%;
@@ -70,34 +69,15 @@
   <div id="status-container" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
     <div id="loader" class="text-center">
       <div class="w-16 h-16 border-4 border-slate-100 border-t-emerald-500 rounded-full animate-spin mx-auto mb-4"></div>
-      <p class="text-slate-500 animate-pulse">กำลังโหลดข้อมูล...</p>
-    </div>
-    <div id="error-message" class="hidden text-center p-6 max-w-md">
-      <div class="text-red-500 text-5xl mb-4">⚠️</div>
-      <h3 class="text-lg font-bold text-red-600 mb-2">เกิดข้อผิดพลาดในการโหลด</h3>
-      <p id="error-text" class="text-sm text-slate-500 mb-4"></p>
-      <button onclick="location.reload()" class="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700">รีโหลดหน้าเว็บ</button>
+      <p class="text-slate-500 animate-pulse">Loading...</p>
     </div>
   </div>
 
   <div id="root" class="opacity-0 transition-opacity duration-500"></div>
 
-  <script>
-    window.onerror = function(msg, url, line) {
-      const loader = document.getElementById('loader');
-      if(loader) loader.style.display = 'none';
-      const errMsg = document.getElementById('error-message');
-      if(errMsg) errMsg.classList.remove('hidden');
-      const errText = document.getElementById('error-text');
-      if(errText) errText.innerText = "System Error: " + msg;
-      return false; 
-    };
-  </script>
-
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // --- Helper Function for Smooth Scrolling ---
     const smoothScrollTo = (e, id) => {
       e.preventDefault();
       const element = document.getElementById(id);
@@ -105,15 +85,9 @@
         const headerOffset = 100;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
-        });
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
       }
     };
-
-    // --- Components ---
 
     const Icon = ({ name, size = 24, className = "" }) => {
       const iconRef = useRef(null);
@@ -138,9 +112,7 @@
       </a>
     );
 
-    // --- Constants ---
-    
-    // ลิงค์นี้ยังคงต้องใช้ App Script เดิมสำหรับการจองคิว (Backend)
+    // --- DATA & TRANSLATIONS ---
     const NEW_QUEUE_LINK = "https://poppingaeiou.github.io/TTMSADAOHOS/";
     const YOUTUBE_VIDEO_ID = "_nQcj7w2pPQ";
 
@@ -151,38 +123,163 @@
       facebook: "https://www.facebook.com/ttmsadao/",
       tiktok: "https://www.tiktok.com/@ttm_sadaohos",
       youtube: "https://www.youtube.com/@TTM_TCM_SADAO",
-      location: "โรงพยาบาลสะเดา ต.สะเดา อ.สะเดา จ.สงขลา"
+      location: {
+          th: "โรงพยาบาลสะเดา ต.สะเดา อ.สะเดา จ.สงขลา",
+          en: "Sadao Hospital, Sadao, Songkhla, Thailand"
+      }
     };
 
     const ASSETS = { logo: "https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" };
-
     const HERO_IMAGES = [
       "https://img5.pic.in.th/file/secure-sv1/d26f2357c0618da568d3dcf464837fda.png",
       "https://img5.pic.in.th/file/secure-sv1/52083c99d955995f60b4a9dd8448920a.png",
       "https://img2.pic.in.th/pic/2e56ebb3c838125fd55c9db5dcd51baf.png"
     ];
-
     const CHINESE_SLIDES = [
       "https://img5.pic.in.th/file/secure-sv1/-01c93a87008cc3d05e.jpg",
       "https://img2.pic.in.th/pic/-02b4ed586a4999c82b.png",
       "https://img2.pic.in.th/pic/-030112561b55359c2a.png"
     ];
 
+    const UI_TEXT = {
+        th: {
+            title: "กลุ่มงานการแพทย์แผนไทยฯ",
+            subTitle: "โรงพยาบาลสะเดา จ.สงขลา",
+            menuHome: "หน้าแรก",
+            menuTeam: "บุคลากร",
+            menuService: "บริการ",
+            menuContact: "ติดต่อ",
+            checkQueue: "ตรวจสอบคิว",
+            heroTag: "✨ ศูนย์รวมศาสตร์การแพทย์แผนไทยและจีนที่ทันสมัยที่สุดในสะเดา",
+            heroTitle1: "สุขภาพดี เริ่มต้นที่",
+            heroTitle2: "การดูแลใส่ใจ",
+            heroDesc: "ให้บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness เพื่อสุขภาพ โดยทีมผู้เชี่ยวชาญ โรงพยาบาลสะเดา",
+            viewService: "ดูรายการบริการ",
+            introTitle: "แนะนำบริการของเรา",
+            introDesc: "ชมวิดีโอแนะนำคลินิกแพทย์แผนไทยและการแพทย์ทางเลือก",
+            teamTitle: "โครงสร้างบุคลากร",
+            teamDesc: "ทีมงานคุณภาพ พร้อมให้บริการด้วยความใส่ใจ",
+            teamAssistant: "ทีมผู้ช่วยแพทย์แผนไทย",
+            serviceTitle: "บริการของเรา",
+            serviceDesc: "เลือกดูรายการบริการ ราคา และรายละเอียดสิทธิการรักษาได้ตามหมวดหมู่",
+            catAll: "ทั้งหมด",
+            catThai: "แพทย์แผนไทย",
+            catChinese: "แพทย์แผนจีน",
+            catWellness: "Wellness",
+            knowledgeTitle: "เกร็ดความรู้แพทย์แผนจีน",
+            promoTitle: "โปรโมชั่นพิเศษ! ฝังเข็มหน้าใส",
+            promoDesc: "คอร์ส 10 ครั้ง ราคาพิเศษเพียง",
+            promoNormal: "(จากปกติ 3,000.-)",
+            contactTitle: "ติดต่อสอบถาม & จองคิว",
+            locTitle: "สถานที่ตั้ง",
+            locDesc: "ชั้น 4 ตึกอุบัติเหตุ 4 ชั้น (ตึกมรกต)",
+            timeTitle: "เวลาทำการ",
+            timeThai: "แพทย์แผนไทย",
+            timeThaiDesc: "จันทร์-ศุกร์ : 08.00-20.00 น.\nเสาร์-นักขัตฤกษ์ : 08.00-16.00 น.\n⛔ หยุดวันอาทิตย์",
+            timeChinese: "แพทย์แผนจีน",
+            timeChineseDesc: "จันทร์-ศุกร์ : 08.00-16.00 น.\n⛔ ปิดวันเสาร์-อาทิตย์-นักขัตฤกษ์",
+            canBook: "สามารถนัดจองคิวล่วงหน้าได้",
+            phoneTitle: "เบอร์โทรศัพท์",
+            motto: "\"เรามุ่งมั่นให้บริการด้วยมาตรฐาน ผสมผสานภูมิปัญญาไทยเพื่อสุขภาพของคุณ\"",
+            faqTitle: "คำถามที่พบบ่อย",
+            rights: { gold: "สิทธิบัตรทอง", civil: "สิทธิข้าราชการ", sso: "สิทธิประกันสังคม", self: "ชำระเงินเอง" },
+            claim: "เบิกได้",
+            pay: "จ่าย",
+            baht: "บาท",
+            mins: "นาที",
+            times: "ครั้ง",
+            hour: "ชั่วโมง"
+        },
+        en: {
+            title: "TTM & TCM Department",
+            subTitle: "Sadao Hospital, Songkhla",
+            menuHome: "Home",
+            menuTeam: "Team",
+            menuService: "Services",
+            menuContact: "Contact",
+            checkQueue: "Check Queue",
+            heroTag: "✨ The Most Modern Thai & Chinese Medicine Center in Sadao",
+            heroTitle1: "Good Health Starts With",
+            heroTitle2: "Great Care",
+            heroDesc: "Providing Thai Traditional Medicine, Chinese Medicine, and Wellness services by expert team at Sadao Hospital.",
+            viewService: "View Services",
+            introTitle: "Our Introduction",
+            introDesc: "Watch video introduction of our clinic and services.",
+            teamTitle: "Our Team",
+            teamDesc: "Quality team ready to serve with care.",
+            teamAssistant: "TTM Assistant Team",
+            serviceTitle: "Our Services",
+            serviceDesc: "Browse services, prices, and reimbursement rights by category.",
+            catAll: "All",
+            catThai: "Thai Medicine",
+            catChinese: "Chinese Med",
+            catWellness: "Wellness",
+            knowledgeTitle: "TCM Knowledge",
+            promoTitle: "Special Promo! Facial Acupuncture",
+            promoDesc: "10 Sessions Course only",
+            promoNormal: "(Normal 3,000.-)",
+            contactTitle: "Contact & Booking",
+            locTitle: "Location",
+            locDesc: "4th Floor, Accident Building (Emerald Bldg)",
+            timeTitle: "Working Hours",
+            timeThai: "Thai Medicine",
+            timeThaiDesc: "Mon-Fri : 08.00-20.00\nSat-Public Holiday : 08.00-16.00\n⛔ Closed on Sunday",
+            timeChinese: "Chinese Medicine",
+            timeChineseDesc: "Mon-Fri : 08.00-16.00\n⛔ Closed Sat-Sun-Public Holiday",
+            canBook: "Advance booking available",
+            phoneTitle: "Phone Number",
+            motto: "\"We are committed to standard service, blending Thai wisdom for your health.\"",
+            faqTitle: "FAQ",
+            rights: { gold: "Gold Card (UC)", civil: "Civil Servant", sso: "Social Security", self: "Self-Pay" },
+            claim: "Claimable",
+            pay: "Pay",
+            baht: "THB",
+            mins: "Mins",
+            times: "Times",
+            hour: "Hour"
+        }
+    };
+
     const PERSONNEL = [
-      { id: 1, name: "นพ.ชัยวุฒิ สุขสมานวงศ์", nickname: "", role: "รักษาการในตำแหน่ง ผู้อำนวยการโรงพยาบาลสะเดา", subRole: "นายแพทย์เชี่ยวชาญ (ด้านเวชกรรมป้องกัน)", image: "https://img2.pic.in.th/pic/.48dc015dd53d0d93.png", level: "director" },
-      { id: 2, name: "พท.ศุภชัย อุไร", nickname: "ชาย", role: "หัวหน้ากลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก", subRole: "แพทย์แผนไทยชำนาญการ", image: "https://img5.pic.in.th/file/secure-sv1/-52d2d1ee6993cded.png", level: "head" },
-      { id: 3, name: "พท.ทศพร คงสุขนิรันดร์", nickname: "ปิง", role: "แพทย์แผนไทย", image: "https://img2.pic.in.th/pic/-98ea2b365e59a684.png", level: "doctor" },
-      { id: 4, name: "พจ.พรเพชร เพชรคงแก้ว", nickname: "บิ๋ม", role: "แพทย์แผนจีน", image: "https://img5.pic.in.th/file/secure-sv1/-a2b8b51ae68cca5f.png", level: "doctor" },
-      { id: 5, name: "คุณจินดา จันทร์หอม", nickname: "เจี๊ยบ", role: "พนักงานช่วยเหลือคนไข้", image: "https://img2.pic.in.th/pic/93b060e9e4b3fc9a9070d5ac2768c879.png", level: "support" },
-      { id: 6, name: "คุณเจนจิรา หมอราช", nickname: "เจน", role: "พนักงานบริการ", image: "https://img5.pic.in.th/file/secure-sv1/-48f38d85a639021d.png", level: "support" },
-      { id: 7, name: "คุณอทิตย์ติญา แดงนุ้ย", nickname: "ฟา", role: "ผช.แพทย์แผนจีน", image: "https://img5.pic.in.th/file/secure-sv1/-eb41ee4792de0bb6.png", level: "support" },
-      { id: 8, name: "คุณรจนา จันเงิน", nickname: "แหม่ม", role: "ผช.แพทย์แผนไทย", image: "https://img2.pic.in.th/pic/-b38b682db8ac596b.png", level: "assistant_thai" },
-      { id: 9, name: "คุณอรรถพล อั้นซ้าย", nickname: "บ่าว", role: "ผช.แพทย์แผนไทย", image: "https://img5.pic.in.th/file/secure-sv1/6b74e1ebb096c81368605ff43948dab4.png", level: "assistant_thai" },
-      { id: 10, name: "คุณศินารัตน์ แซ่ตั้ง", nickname: "ซี", role: "ผช.แพทย์แผนไทย", image: "https://img2.pic.in.th/pic/-df4e3c6f4a4b331f.png", level: "assistant_thai" },
-      { id: 11, name: "คุณจุฑามาศ เว้นบาป", nickname: "ฝน", role: "ผช.แพทย์แผนไทย", image: "https://img5.pic.in.th/file/secure-sv1/709dfc05071615eaaf008ea63d1e037e.png", level: "assistant_thai" },
-      { id: 12, name: "คุณรัตน์ชนก พูลคุ้ม", nickname: "กวาง", role: "ผช.แพทย์แผนไทย", image: "https://img2.pic.in.th/pic/-83673d6d528be12a.png", level: "assistant_thai" },
-      { id: 13, name: "คุณนิกษ์นิภา คงสุวรรณ์", nickname: "ตูน", role: "ผช.แพทย์แผนไทย", image: "https://img5.pic.in.th/file/secure-sv1/-c4fe207fa6c04aa3.png", level: "assistant_thai" },
-      { id: 14, name: "คุณณิชาภัทร ทองบริบูรณ์", nickname: "วาวา", role: "ผช.แพทย์แผนไทย", image: "https://img2.pic.in.th/pic/1ef0aa325ccac37724897c9f2c10e5f4.png", level: "assistant_thai" }
+      { id: 1, name: { th: "นพ.ชัยวุฒิ สุขสมานวงศ์", en: "Dr. Chaiwut Suksamanwong" }, nickname: "", role: { th: "รักษาการในตำแหน่ง ผู้อำนวยการโรงพยาบาลสะเดา", en: "Acting Director of Sadao Hospital" }, subRole: { th: "นายแพทย์เชี่ยวชาญ (ด้านเวชกรรมป้องกัน)", en: "Expert Physician (Preventive Medicine)" }, image: "https://img2.pic.in.th/pic/.48dc015dd53d0d93.png", level: "director" },
+      { id: 2, name: { th: "พท.ศุภชัย อุไร", en: "Mr. Supachai Urai" }, nickname: { th: "ชาย", en: "Chai" }, role: { th: "หัวหน้ากลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก", en: "Head of TTM & TCM Department" }, subRole: { th: "แพทย์แผนไทยชำนาญการ", en: "Experienced Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/-52d2d1ee6993cded.png", level: "head" },
+      { id: 3, name: { th: "พท.ทศพร คงสุขนิรันดร์", en: "Mr. Tossaporn Khongsuknirun" }, nickname: { th: "ปิง", en: "Ping" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img2.pic.in.th/pic/-98ea2b365e59a684.png", level: "doctor" },
+      { id: 4, name: { th: "พจ.พรเพชร เพชรคงแก้ว", en: "Miss Pornpetch Petchkongkaew" }, nickname: { th: "บิ๋ม", en: "Bim" }, role: { th: "แพทย์แผนจีน", en: "Chinese Medicine Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/-a2b8b51ae68cca5f.png", level: "doctor" },
+      { id: 5, name: { th: "คุณจินดา จันทร์หอม", en: "Ms. Jinda Janhom" }, nickname: { th: "เจี๊ยบ", en: "Jeab" }, role: { th: "พนักงานช่วยเหลือคนไข้", en: "Nurse Aide" }, image: "https://img2.pic.in.th/pic/93b060e9e4b3fc9a9070d5ac2768c879.png", level: "support" },
+      { id: 6, name: { th: "คุณเจนจิรา หมอราช", en: "Ms. Jenjira Mhorach" }, nickname: { th: "เจน", en: "Jane" }, role: { th: "พนักงานบริการ", en: "Service Staff" }, image: "https://img5.pic.in.th/file/secure-sv1/-48f38d85a639021d.png", level: "support" },
+      { id: 7, name: { th: "คุณอทิตย์ติญา แดงนุ้ย", en: "Ms. Atittiya Dangnui" }, nickname: { th: "ฟา", en: "Fa" }, role: { th: "ผช.แพทย์แผนจีน", en: "TCM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/-eb41ee4792de0bb6.png", level: "support" },
+      { id: 8, name: { th: "คุณรจนา จันเงิน", en: "Ms. Rotjana Janngoen" }, nickname: { th: "แหม่ม", en: "Mam" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/pic/-b38b682db8ac596b.png", level: "assistant_thai" },
+      { id: 9, name: { th: "คุณอรรถพล อั้นซ้าย", en: "Mr. Attapol Unsai" }, nickname: { th: "บ่าว", en: "Bao" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/6b74e1ebb096c81368605ff43948dab4.png", level: "assistant_thai" },
+      { id: 10, name: { th: "คุณศินารัตน์ แซ่ตั้ง", en: "Ms. Sinarat Saetang" }, nickname: { th: "ซี", en: "C" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/pic/-df4e3c6f4a4b331f.png", level: "assistant_thai" },
+      { id: 11, name: { th: "คุณจุฑามาศ เว้นบาป", en: "Ms. Jutamas Wenbab" }, nickname: { th: "ฝน", en: "Fon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/709dfc05071615eaaf008ea63d1e037e.png", level: "assistant_thai" },
+      { id: 12, name: { th: "คุณรัตน์ชนก พูลคุ้ม", en: "Ms. Ratchanok Poonkum" }, nickname: { th: "กวาง", en: "Kwang" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/pic/-83673d6d528be12a.png", level: "assistant_thai" },
+      { id: 13, name: { th: "คุณนิกษ์นิภา คงสุวรรณ์", en: "Ms. Niknipa Khongsuwan" }, nickname: { th: "ตูน", en: "Toon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/-c4fe207fa6c04aa3.png", level: "assistant_thai" },
+      { id: 14, name: { th: "คุณณิชาภัทร ทองบริบูรณ์", en: "Ms. Nichapat Thongboriboon" }, nickname: { th: "วาวา", en: "Wawa" }, role: { th: "ผช.แพทย์แผนไทย", en: "Wawa" }, image: "https://img2.pic.in.th/pic/1ef0aa325ccac37724897c9f2c10e5f4.png", level: "assistant_thai" }
+    ];
+
+    const SERVICES = [
+      { id: 7, category: "thai", name: { th: "นวดรักษา & ประคบสมุนไพร", en: "Therapeutic Massage & Compress" }, image: "https://img5.pic.in.th/file/secure-sv1/03fccfc168e76dc911661d943b51982f.png", duration: 60, prices: { gold: {th:"เบิกได้ (จ่าย 30.-)", en:"Claimable (Pay 30.-)"}, direct: "claim", sso: "250", self: "250" }, tag: {th:"แนะนำ", en:"Recommend"} },
+      { id: 8, category: "thai", name: { th: "นวดเท้าเพื่อการรักษา", en: "Therapeutic Foot Massage" }, image: "https://img5.pic.in.th/file/secure-sv1/f6ec2a3d78b18f2ecaeeb9418e4f2325.png", duration: 60, prices: { gold: {th:"เบิกได้ (จ่าย 30.-)", en:"Claimable (Pay 30.-)"}, direct: "claim", sso: "200", self: "200" } },
+      { id: 9, category: "thai", name: { th: "นวดเพื่อส่งเสริมสุขภาพ", en: "Health Massage" }, image: "https://img2.pic.in.th/pic/37354cf8d9be1211f7c39b39d90c8e2a.png", duration: 60, prices: { gold: "200", direct: "200", sso: "200", self: "200" }, note: {th:"เพิ่มประคบ +50 บาท", en:"Add Herbal Compress +50 THB"} },
+      { id: 10, category: "thai", name: { th: "ฟื้นฟูมารดาหลังคลอด", en: "Postpartum Care" }, image: "https://img5.pic.in.th/file/secure-sv1/488d0b342753fa04d362754c545564ba.md.png", duration: 120, prices: { gold: "claim", direct: "claim", sso: "500", self: "500" }, description: {th:"ทับหม้อเกลือ / นวดเปิดท่อน้ำนม / อบไอน้ำ / ประคบสมุนไพร", en:"Salt Pot Compress / Lactation Massage / Herbal Steam"} },
+      { id: 11, category: "thai", name: { th: "อบไอน้ำสมุนไพร", en: "Herbal Steam" }, image: "https://img2.pic.in.th/pic/1f868c26dc34ba16f9cc15face9d4f05.png", duration: 0, prices: { gold: "claim", direct: "claim", sso: "100", self: "100" } },
+      { id: 1, category: "chinese", name: { th: "ฝังเข็มเพื่อการรักษา", en: "Acupuncture Treatment" }, image: "https://img2.pic.in.th/pic/d359ac8696da066c76f48132a87602b3.png", duration: 30, prices: { gold: {th:"150.- / IMC เบิกได้", en:"150.- / IMC Claimable"}, direct: "claim", sso: "150", self: "150" }, tag: {th:"ยอดนิยม", en:"Popular"} },
+      { id: 2, category: "chinese", name: { th: "ฝังเข็มและกระตุ้นไฟฟ้า", en: "Electro-Acupuncture" }, image: "https://img2.pic.in.th/pic/dd618c225015104b285923e990f471c0.png", duration: 30, prices: { gold: {th:"200.- / IMC เบิกได้", en:"200.- / IMC Claimable"}, direct: "claim", sso: "200", self: "200" } },
+      { id: 3, category: "chinese", name: { th: "ครอบแก้ว (Cupping)", en: "Cupping Therapy" }, image: "https://img5.pic.in.th/file/secure-sv1/a25117101f783602ca6b40e248a8574c.png", duration: 30, prices: { gold: "150", direct: "150", sso: "150", self: "150" } },
+      { id: 4, category: "chinese", name: { th: "กัวซา (Gua Sha)", en: "Gua Sha" }, image: "https://img5.pic.in.th/file/secure-sv1/367f1932e1a97cc92612949636a3b680.png", duration: 30, prices: { gold: "150", direct: "150", sso: "150", self: "150" } },
+      { id: 5, category: "chinese", name: { th: "เม็ดผักกาดแปะหู", en: "Ear Seeds" }, image: "https://img2.pic.in.th/pic/bff4bf80b2bd8007ea40e202456abc94.png", duration: 10, prices: { gold: "100", direct: "100", sso: "100", self: "100" } },
+      { id: 6, category: "chinese", name: { th: "ฝังเข็มใบหน้า (Face)", en: "Facial Acupuncture" }, image: "https://img2.pic.in.th/pic/04e672176850709bddd0a9ecc3882781.png", duration: 30, specialPrice: [{ label: {th:"1 ครั้ง", en:"1 Session"}, price: "300.-" }, { label: {th:"10 ครั้ง", en:"10 Sessions"}, price: "2,600.-" }], note: {th:"ชำระเงินเองเท่านั้น", en:"Self-pay only"} },
+      { id: 12, category: "wellness", name: { th: "สครับเกลือ (Salt Scrub)", en: "Salt Scrub" }, image: "https://img2.pic.in.th/pic/127136b6f8d90a6663cde69408e3ad78.png", duration: 60, singlePrice: "500.-", description: {th:"ผลัดเซลล์ผิว ลดการอุดตัน ผิวเนียนใส", en:"Exfoliate skin, reduce clogging, smooth skin"}, workingHours: {th:"จันทร์-ศุกร์ 08.00-16.00 น.", en:"Mon-Fri 08.00-16.00"} },
+      { id: 13, category: "wellness", name: { th: "สปาผิว & ผลัดเซลล์ผิว", en: "Skin Spa" }, image: "https://img5.pic.in.th/file/secure-sv1/2c481a861621360399d9fa5ae5e4522e.png", duration: "varies", specialPrice: [{ label: {th:"1 ชั่วโมง", en:"1 Hour"}, price: "650.-" }, { label: {th:"2 ชั่วโมง", en:"2 Hours"}, price: "1,000.-" }], description: {th:"เร่งผิวขาวใส นุ่มชุ่มชื้น สีผิวสม่ำเสมอ", en:"Brighten skin, moisturize, even skin tone"}, workingHours: {th:"จันทร์-ศุกร์ 08.00-16.00 น.", en:"Mon-Fri 08.00-16.00"} },
+      { id: 14, category: "wellness", name: { th: "นวดน้ำมันอโรม่า", en: "Aroma Massage" }, image: "https://img2.pic.in.th/pic/a46c58eb896922c1471faade2da50f83.png", duration: 60, singlePrice: "550.-", description: {th:"ผ่อนคลายกล้ามเนื้อด้วยน้ำมันหอมระเหย", en:"Relax muscles with essential oils"}, tag: {th:"ใหม่", en:"New"} }
+    ];
+
+    const FAQS = [
+        { q: {th:"ไปรับบริการต้องเตรียมเอกสารอะไรบ้าง?", en:"What documents are required?"}, a: {th:"เพียงนำบัตรประชาชนใบเดียวมาที่ชั้น 4 ตึกอุบัติเหตุ (ตึกมรกต) ครับ", en:"Just bring your ID card to the 4th floor, Accident Building (Emerald Bldg)."} },
+        { q: {th:"การนวดช่วยเรื่องอะไรบ้าง?", en:"What are the benefits of massage?"}, a: {th:"การนวดช่วย คลายกล้ามเนื้อ เพิ่มการไหลเวียนของเลือด แนะนำเพิ่มการประคบร้อน เพื่อป้องกันการอักเสบเรื้อรังได้ ครับ", en:"Massage helps relax muscles and improve blood circulation. Herbal compress is recommended to prevent chronic inflammation."} },
+        { q: {th:"ฝังเข็มเจ็บไหม?", en:"Is acupuncture painful?"}, a: {th:"การฝังเข็มอาจมีความรู้สึกจี๊ดๆ หรือหน่วงๆ เล็กน้อย แต่ไม่เจ็บเหมือนการฉีดยาครับ ผู้ป่วยส่วนใหญ่สามารถทนได้และรู้สึกผ่อนคลายขณะรักษา", en:"You might feel a slight sensation, but it's not painful like an injection. Most patients find it relaxing."} },
+        { q: {th:"ต้องจองคิวล่วงหน้าหรือไม่?", en:"Is advance booking required?"}, a: {th:"แนะนำให้จองคิวล่วงหน้าผ่านระบบออนไลน์หรือ LINE เพื่อความสะดวกรวดเร็วครับ แต่หากมาติดต่อเลยโดยไม่ได้นัดหมาย ก็สามารถเข้ามารับบริการได้แต่อาจต้องรอคิวว่างครับ", en:"Advance booking via Online/LINE is recommended. Walk-ins are welcome but may have to wait for available slots."} },
+        { q: {th:"ฝังเข็มช่วยอะไร?", en:"What does acupuncture treat?"}, a: {th:"ช่วยปรับสมดุลร่างกาย กระตุ้นจุดลมปราณ (ชี่) และเลือดให้ไหลเวียนดีขึ้น ระบายความร้อนหรือสารพิษ และฟื้นฟูร่างกาย", en:"It balances the body, stimulates Qi and blood circulation, releases heat/toxins, and restores body balance."} }
     ];
 
     const LEVEL_STYLES = {
@@ -194,32 +291,15 @@
     };
 
     const CATEGORY_THEMES = {
-      thai: { label: "แพทย์แผนไทย", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200", hoverBorder: "group-hover:border-emerald-500", badge: "bg-emerald-600", btnActive: "bg-emerald-600 text-white shadow-emerald-200", icon: "leaf" },
-      chinese: { label: "แพทย์แผนจีน", color: "text-red-700", bg: "bg-red-50", border: "border-red-200", hoverBorder: "group-hover:border-red-500", badge: "bg-gradient-to-r from-red-600 to-amber-500", btnActive: "bg-gradient-to-r from-red-700 to-red-600 text-white shadow-red-200", icon: "zap" },
-      wellness: { label: "Wellness", color: "text-cyan-700", bg: "bg-cyan-50", border: "border-cyan-200", hoverBorder: "group-hover:border-cyan-500", badge: "bg-cyan-600", btnActive: "bg-cyan-600 text-white shadow-cyan-200", icon: "droplets" },
-      all: { label: "ทั้งหมด", btnActive: "bg-slate-800 text-white shadow-slate-300" }
+      thai: { color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200", hoverBorder: "group-hover:border-emerald-500", badge: "bg-emerald-600", btnActive: "bg-emerald-600 text-white shadow-emerald-200", icon: "leaf" },
+      chinese: { color: "text-red-700", bg: "bg-red-50", border: "border-red-200", hoverBorder: "group-hover:border-red-500", badge: "bg-gradient-to-r from-red-600 to-amber-500", btnActive: "bg-gradient-to-r from-red-700 to-red-600 text-white shadow-red-200", icon: "zap" },
+      wellness: { color: "text-cyan-700", bg: "bg-cyan-50", border: "border-cyan-200", hoverBorder: "group-hover:border-cyan-500", badge: "bg-cyan-600", btnActive: "bg-cyan-600 text-white shadow-cyan-200", icon: "droplets" },
+      all: { btnActive: "bg-slate-800 text-white shadow-slate-300" }
     };
-
-    const SERVICES = [
-      { id: 7, category: "thai", name: "นวดรักษา & ประคบสมุนไพร", image: "https://img5.pic.in.th/file/secure-sv1/03fccfc168e76dc911661d943b51982f.png", duration: "⏱︎ 60 นาที", prices: { gold: "เบิกได้ (จ่าย 30.-)", direct: "เบิกได้", sso: "250.-", self: "250.-" }, tag: "แนะนำ" },
-      { id: 8, category: "thai", name: "นวดเท้าเพื่อการรักษา", image: "https://img5.pic.in.th/file/secure-sv1/f6ec2a3d78b18f2ecaeeb9418e4f2325.png", duration: "⏱︎ 60 นาที", prices: { gold: "เบิกได้ (จ่าย 30.-)", direct: "เบิกได้", sso: "200.-", self: "200.-" } },
-      { id: 9, category: "thai", name: "นวดเพื่อส่งเสริมสุขภาพ", image: "https://img2.pic.in.th/pic/37354cf8d9be1211f7c39b39d90c8e2a.png", duration: "⏱︎ 60 นาที", prices: { gold: "200.-", direct: "200.-", sso: "200.-", self: "200.-" }, note: "เพิ่มประคบ +50 บาท" },
-      { id: 10, category: "thai", name: "ฟื้นฟูมารดาหลังคลอด", image: "https://img5.pic.in.th/file/secure-sv1/488d0b342753fa04d362754c545564ba.md.png", duration: "⏱︎ 120 นาที", prices: { gold: "เบิกได้", direct: "เบิกได้", sso: "500.-", self: "500.-" }, description: "ทับหม้อเกลือ / นวดเปิดท่อน้ำนม / อบไอน้ำ / ประคบสมุนไพร" },
-      { id: 11, category: "thai", name: "อบไอน้ำสมุนไพร", image: "https://img2.pic.in.th/pic/1f868c26dc34ba16f9cc15face9d4f05.png", duration: "⏱︎ ตามความเหมาะสม", prices: { gold: "เบิกได้", direct: "เบิกได้", sso: "100.-", self: "100.-" } },
-      { id: 1, category: "chinese", name: "ฝังเข็มเพื่อการรักษา", image: "https://img2.pic.in.th/pic/d359ac8696da066c76f48132a87602b3.png", duration: "⏱︎ ไม่เกิน 30 นาที", prices: { gold: "150.- / IMC เบิกได้", direct: "เบิกได้", sso: "150.-", self: "150.-" }, tag: "ยอดนิยม" },
-      { id: 2, category: "chinese", name: "ฝังเข็มและกระตุ้นไฟฟ้า", image: "https://img2.pic.in.th/pic/dd618c225015104b285923e990f471c0.png", duration: "⏱︎ ไม่เกิน 30 นาที", prices: { gold: "200.- / IMC เบิกได้", direct: "เบิกได้", sso: "200.-", self: "200.-" } },
-      { id: 3, category: "chinese", name: "ครอบแก้ว (Cupping)", image: "https://img5.pic.in.th/file/secure-sv1/a25117101f783602ca6b40e248a8574c.png", duration: "⏱︎ ︎ไม่เกิน 30 นาที", prices: { gold: "150.-", direct: "150.-", sso: "150.-", self: "150.-" } },
-      { id: 4, category: "chinese", name: "กัวซา (Gua Sha)", image: "https://img5.pic.in.th/file/secure-sv1/367f1932e1a97cc92612949636a3b680.png", duration: "⏱︎ 15-30 นาที", prices: { gold: "150.-", direct: "150.-", sso: "150.-", self: "150.-" } },
-      { id: 5, category: "chinese", name: "เม็ดผักกาดแปะหู", image: "https://img2.pic.in.th/pic/bff4bf80b2bd8007ea40e202456abc94.png", duration: "⏱︎ ไม่เกิน 10 นาที", prices: { gold: "100.-", direct: "100.-", sso: "100.-", self: "100.-" } },
-      { id: 6, category: "chinese", name: "ฝังเข็มใบหน้า (Face)", image: "https://img2.pic.in.th/pic/04e672176850709bddd0a9ecc3882781.png", duration: "⏱︎ ไม่เกิน 30 นาที", specialPrice: [{ label: "1 ครั้ง", price: "300.-" }, { label: "10 ครั้ง", price: "2,600.-" }], note: "ชำระเงินเองเท่านั้น" },
-      { id: 12, category: "wellness", name: "สครับเกลือ (Salt Scrub)", image: "https://img2.pic.in.th/pic/127136b6f8d90a6663cde69408e3ad78.png", duration: "⏱︎ 1 ชั่วโมง", singlePrice: "500.-", description: "ผลัดเซลล์ผิว ลดการอุดตัน ผิวเนียนใส", workingHours: "จันทร์-ศุกร์ 08.00-16.00 น." },
-      { id: 13, category: "wellness", name: "สปาผิว & ผลัดเซลล์ผิว", image: "https://img5.pic.in.th/file/secure-sv1/2c481a861621360399d9fa5ae5e4522e.png", duration: "⏱︎ 1 - 2 ชั่วโมง", specialPrice: [{ label: "1 ชั่วโมง", price: "650.-" }, { label: "2 ชั่วโมง", price: "1,000.-" }], description: "เร่งผิวขาวใส นุ่มชุ่มชื้น สีผิวสม่ำเสมอ", workingHours: "จันทร์-ศุกร์ 08.00-16.00 น." },
-      { id: 14, category: "wellness", name: "นวดน้ำมันอโรม่า", image: "https://img2.pic.in.th/pic/a46c58eb896922c1471faade2da50f83.png", duration: "⏱︎ 1 ชั่วโมง", singlePrice: "550.-", description: "ผ่อนคลายกล้ามเนื้อด้วยน้ำมันหอมระเหย", tag: "ใหม่" }
-    ];
 
     // --- Sub-Components ---
 
-    const HeroSlider = () => {
+    const HeroSlider = ({lang}) => {
       const [index, setIndex] = useState(0);
       useEffect(() => {
         const timer = setInterval(() => setIndex((prev) => (prev + 1) % HERO_IMAGES.length), 5000);
@@ -238,22 +318,20 @@
           <div className="absolute inset-0 flex items-center justify-center text-center px-4 z-10">
             <div className="max-w-3xl animate-fade-in">
               <span className="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur-md text-cyan-200 text-sm mb-4 border border-white/20">
-                ✨ ศูนย์รวมศาสตร์การแพทย์แผนไทยและจีนที่ทันสมัยที่สุดในสะเดา
+                {UI_TEXT[lang].heroTag}
               </span>
               <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
-                สุขภาพดี เริ่มต้นที่<br/><span className="text-cyan-400">การดูแลใส่ใจ</span>
+                {UI_TEXT[lang].heroTitle1}<br/><span className="text-cyan-400">{UI_TEXT[lang].heroTitle2}</span>
               </h2>
               <p className="text-lg md:text-xl text-slate-200 mb-8 font-light">
-                ให้บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness เพื่อสุขภาพ<br className="hidden md:block"/> โดยทีมผู้เชี่ยวชาญ โรงพยาบาลสะเดา
+                {UI_TEXT[lang].heroDesc}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                
                 <a href="#services" onClick={(e) => smoothScrollTo(e, 'services')} className="bg-white text-cyan-800 px-8 py-4 rounded-full font-bold shadow-lg hover:bg-cyan-50 transition-transform hover:scale-105 flex items-center justify-center gap-2 relative z-20 cursor-pointer">
-                  ดูรายการบริการ <Icon name="chevron-right" size={20} />
+                   {UI_TEXT[lang].viewService} <Icon name="chevron-right" size={20} />
                 </a>
-
                 <a href={NEW_QUEUE_LINK} target="_blank" className="btn-glow bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105 flex items-center justify-center gap-2 ring-4 ring-emerald-500/30 relative z-20">
-                  <Icon name="calendar-check" size={20} /> ตรวจสอบคิว
+                  <Icon name="calendar-check" size={20} /> {UI_TEXT[lang].checkQueue}
                 </a>
               </div>
             </div>
@@ -262,13 +340,13 @@
       );
     };
 
-    const VideoIntroduction = () => {
+    const VideoIntroduction = ({lang}) => {
       return (
         <section className="py-16 bg-white border-b border-slate-100">
           <div className="container mx-auto px-4">
-             <div className="text-center mb-10">
-                <h3 className="text-3xl font-bold text-slate-800 mb-2">แนะนำบริการของเรา</h3>
-                <p className="text-slate-500">ชมวิดีโอแนะนำคลินิกแพทย์แผนไทยและการแพทย์ทางเลือก</p>
+              <div className="text-center mb-10">
+                <h3 className="text-3xl font-bold text-slate-800 mb-2">{UI_TEXT[lang].introTitle}</h3>
+                <p className="text-slate-500">{UI_TEXT[lang].introDesc}</p>
               </div>
             <div className="max-w-4xl mx-auto">
               <div className="video-container">
@@ -319,52 +397,26 @@
       </div>
     );
 
-    const FAQSection = () => (
+    const FAQSection = ({lang}) => (
       <section className="py-16 bg-slate-50 border-t border-slate-200">
         <div className="container mx-auto px-4 max-w-3xl">
-          <h3 className="text-2xl font-bold text-center mb-8 text-slate-800">คำถามที่พบบ่อย</h3>
+          <h3 className="text-2xl font-bold text-center mb-8 text-slate-800">{UI_TEXT[lang].faqTitle}</h3>
           <div className="space-y-4">
-            <details className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
-              <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
-                ไปรับบริการต้องเตรียมเอกสารอะไรบ้าง?
-                <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
-              </summary>
-              <p className="text-slate-500 mt-3 text-sm leading-relaxed">เพียงนำบัตรประชาชนใบเดียวมาที่ชั้น 4 ตึกอุบัติเหตุ (ตึกมรกต) ครับ</p>
-            </details>
-            <details className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
-            <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
-                การนวดช่วยเรื่องอะไรบ้าง?
-                <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
-              </summary>
-              <p className="text-slate-500 mt-3 text-sm leading-relaxed">การนวดช่วย คลายกล้ามเนื้อ เพิ่มการไหลเวียนของเลือด แนะนำเพิ่มการประคบร้อน เพื่อป้องกันการอักเสบเรื้อรังได้ ครับ</p>
-            </details>
-            <details className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
-              <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
-                ฝังเข็มเจ็บไหม?
-                <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
-              </summary>
-              <p className="text-slate-500 mt-3 text-sm leading-relaxed">การฝังเข็มอาจมีความรู้สึกจี๊ดๆ หรือหน่วงๆ เล็กน้อย แต่ไม่เจ็บเหมือนการฉีดยาครับ ผู้ป่วยส่วนใหญ่สามารถทนได้และรู้สึกผ่อนคลายขณะรักษา</p>
-            </details>
-             <details className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
-              <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
-                ต้องจองคิวล่วงหน้าหรือไม่?
-                <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
-              </summary>
-              <p className="text-slate-500 mt-3 text-sm leading-relaxed">แนะนำให้จองคิวล่วงหน้าผ่านระบบออนไลน์หรือ LINE เพื่อความสะดวกรวดเร็วครับ แต่หากมาติดต่อเลยโดยไม่ได้นัดหมาย ก็สามารถเข้ามารับบริการได้แต่อาจต้องรอคิวว่างครับ</p>
-            </details>
-            <details className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
-              <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
-                ฝังเข็มช่วยอะไร?
-                <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
-              </summary>
-              <p className="text-slate-500 mt-3 text-sm leading-relaxed">การฝังเข็มช่วยปรับสมดุลร่างกาย ช่วยกระตุ้นจุดลมปราณ (ชี่) และเลือดให้ไหลเวียนได้ดีขึ้น ช่วยระบายระบบเลือดที่คั่งเนื่องจากการไหลเวียนไม่ดี ระบายความร้อนหรือสารพิษ เป็นการบำรุง ซ่อมแซมและฟื้นฟูร่างกายให้กลับเข้าสู่สภาวะสมดุล</p>
-            </details>
+            {FAQS.map((item, idx) => (
+                <details key={idx} className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
+                  <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
+                    {item.q[lang]}
+                    <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
+                  </summary>
+                  <p className="text-slate-500 mt-3 text-sm leading-relaxed">{item.a[lang]}</p>
+                </details>
+            ))}
           </div>
         </div>
       </section>
     );
 
-    const PersonnelCard = ({ person, size = "normal" }) => {
+    const PersonnelCard = ({ person, size = "normal", lang }) => {
       const isLarge = size === "large";
       const isMedium = size === "medium";
       const styles = LEVEL_STYLES[person.level] || LEVEL_STYLES.support;
@@ -379,65 +431,79 @@
           <div className="p-6 flex flex-col items-center w-full flex-grow relative z-10">
             <div className={`relative mb-4 rounded-full p-1 bg-gradient-to-br ${styles.accent}`}>
               <div className={`${imgWidth} ${imgHeight} rounded-full overflow-hidden bg-white border-2 border-white`}>
-                <img src={person.image} alt={person.name} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+                <img src={person.image} alt={person.name[lang]} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110" loading="lazy" />
               </div>
             </div>
             <div className="text-center mb-3">
-              <h4 className={`font-bold ${styles.text} leading-tight ${textSize}`}>{person.name}</h4>
-              {person.nickname && <span className="inline-block mt-1 text-xs text-slate-500 font-medium">({person.nickname})</span>}
+              <h4 className={`font-bold ${styles.text} leading-tight ${textSize}`}>{person.name[lang]}</h4>
+              {person.nickname && person.nickname[lang] && <span className="inline-block mt-1 text-xs text-slate-500 font-medium">({person.nickname[lang]})</span>}
             </div>
             <div className="mt-auto w-full text-center">
                 <div className={`inline-block px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold bg-slate-50/80 ${styles.text} border ${styles.border} backdrop-blur-sm leading-tight shadow-sm group-hover:bg-white transition-colors`}>
-                {person.role}
+                {person.role[lang]}
               </div>
-              {person.subRole && <p className="text-[10px] text-slate-500 mt-2 leading-tight px-2 font-medium">{person.subRole}</p>}
+              {person.subRole && <p className="text-[10px] text-slate-500 mt-2 leading-tight px-2 font-medium">{person.subRole[lang]}</p>}
             </div>
           </div>
         </div>
       );
     };
 
-    const ServiceCard = ({ service }) => {
+    const ServiceCard = ({ service, lang }) => {
       const theme = CATEGORY_THEMES[service.category];
+      const catLabel = lang === 'th' 
+        ? (service.category === 'thai' ? 'แพทย์แผนไทย' : service.category === 'chinese' ? 'แพทย์แผนจีน' : 'Wellness') 
+        : (service.category === 'thai' ? 'Thai Med' : service.category === 'chinese' ? 'Chinese Med' : 'Wellness');
+        
+      const formatPrice = (p) => {
+          if(typeof p === 'object') return p[lang]; // If price is localized object
+          if(p === 'claim') return UI_TEXT[lang].claim;
+          return p === '-' ? '-' : (p + ".-");
+      }
+
+      const durationText = service.duration === 0 
+        ? (lang==='th' ? 'ตามความเหมาะสม' : 'Varies') 
+        : (service.duration === 'varies' ? (lang==='th' ? '1-2 ชั่วโมง' : '1-2 Hours') : `${service.duration} ${UI_TEXT[lang].mins}`);
+
       return (
         <div className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border-2 border-transparent ${theme.hoverBorder} group flex flex-col h-full relative hover-lift`}>
           <div className="relative h-48 overflow-hidden bg-gray-100">
-            <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+            <img src={service.image} alt={service.name[lang]} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60"></div>
-            <span className={`absolute top-3 left-3 ${theme.badge} text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center gap-1`}><Icon name={theme.icon} size={10} /> {theme.label}</span>
-            {service.tag && <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-rose-600 text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">{service.tag}</span>}
+            <span className={`absolute top-3 left-3 ${theme.badge} text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center gap-1`}><Icon name={theme.icon} size={10} /> {catLabel}</span>
+            {service.tag && <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-rose-600 text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">{service.tag[lang]}</span>}
             <div className="absolute bottom-3 left-3 text-white pr-2">
-              <h3 className="font-bold text-lg leading-tight shadow-black drop-shadow-md">{service.name}</h3>
-              <div className="flex items-center gap-1 text-xs opacity-90 mt-1"><Icon name="clock" size={12} /><span>{service.duration}</span></div>
+              <h3 className="font-bold text-lg leading-tight shadow-black drop-shadow-md">{service.name[lang]}</h3>
+              <div className="flex items-center gap-1 text-xs opacity-90 mt-1"><Icon name="clock" size={12} /><span>{durationText}</span></div>
             </div>
           </div>
           <div className="p-4 flex-grow flex flex-col">
             {(service.description || service.workingHours) && (
               <div className="mb-3">
-                  {service.description && <p className="text-xs text-slate-500 mb-1">{service.description}</p>}
-                  {service.workingHours && <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded w-fit"><Icon name="clock" size={10} /> {service.workingHours}</div>}
+                  {service.description && <p className="text-xs text-slate-500 mb-1">{service.description[lang]}</p>}
+                  {service.workingHours && <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded w-fit"><Icon name="clock" size={10} /> {service.workingHours[lang]}</div>}
               </div>
             )}
             <div className={`mt-auto bg-white rounded-lg p-3 border border-slate-100 shadow-inner relative overflow-hidden`}>
               <div className={`absolute top-0 left-0 w-full h-1 ${theme.badge} opacity-20`}></div>
               {service.prices ? (
                 <div className="space-y-1">
-                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">สิทธิบัตรทอง (หลักประกันสุขภาพแห่งชาติ)</span><span className="text-sm">{service.prices.gold}</span></div>
-                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">สิทธิข้าราชการ</span><span className="text-sm">{service.prices.direct}</span></div>
-                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">สิทธิประกันสังคม</span><span className="text-sm">{service.prices.sso}</span></div>
+                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">{UI_TEXT[lang].rights.gold}</span><span className="text-sm">{formatPrice(service.prices.gold)}</span></div>
+                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">{UI_TEXT[lang].rights.civil}</span><span className="text-sm">{formatPrice(service.prices.direct)}</span></div>
+                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">{UI_TEXT[lang].rights.sso}</span><span className="text-sm">{formatPrice(service.prices.sso)}</span></div>
                   <div className="border-t border-slate-100 my-1"></div>
-                  <div className="flex justify-between items-center py-1 text-slate-800 font-semibold"><span className="text-xs">สิทธิชำระเงินเอง</span><span className="text-sm">{service.prices.self}</span></div>
+                  <div className="flex justify-between items-center py-1 text-slate-800 font-semibold"><span className="text-xs">{UI_TEXT[lang].rights.self}</span><span className="text-sm">{formatPrice(service.prices.self)}</span></div>
                 </div>
               ) : service.specialPrice ? (
                 <div className="space-y-2">
                   {service.specialPrice.map((item, index) => (
-                    <div key={index} className="flex justify-between items-center"><span className="text-xs text-slate-500">{item.label}</span><span className={`text-lg font-bold ${theme.color}`}>{item.price}</span></div>
+                    <div key={index} className="flex justify-between items-center"><span className="text-xs text-slate-500">{item.label[lang]}</span><span className={`text-lg font-bold ${theme.color}`}>{item.price}</span></div>
                   ))}
                 </div>
               ) : (
-                  <div className="flex justify-between items-center pt-2"><span className="text-sm text-slate-500">ค่าบริการ</span><span className={`text-xl font-bold ${theme.color}`}>{service.singlePrice || "-"}</span></div>
+                <div className="flex justify-between items-center pt-2"><span className="text-sm text-slate-500">{UI_TEXT[lang].rights.self}</span><span className={`text-xl font-bold ${theme.color}`}>{service.singlePrice || "-"}</span></div>
               )}
-              {service.note && <p className="text-[10px] text-rose-500 mt-2 text-right">* {service.note}</p>}
+              {service.note && <p className="text-[10px] text-rose-500 mt-2 text-right">* {service.note[lang]}</p>}
             </div>
           </div>
         </div>
@@ -447,12 +513,14 @@
     // --- Main App ---
 
     function App() {
+      const [lang, setLang] = useState("th");
       const [activeCategory, setActiveCategory] = useState("all");
       const [isMenuOpen, setIsMenuOpen] = useState(false);
       const [viewCount, setViewCount] = useState(0);
 
+      const toggleLang = () => setLang(prev => prev === "th" ? "en" : "th");
+
       useEffect(() => {
-        // Hide loader when React mounts
         const loader = document.getElementById('status-container');
         const root = document.getElementById('root');
         if(loader && root) {
@@ -461,7 +529,6 @@
         }
 
         try {
-          // หมายเหตุ: บน GitHub Pages, LocalStorage จะนับเฉพาะเครื่องของผู้ใช้งานเท่านั้น ไม่ใช่นับรวมทุกคน
           const STORAGE_KEY = 'sadao_ttm_views_v_github'; 
           const storedCount = localStorage.getItem(STORAGE_KEY);
           let newCount = storedCount ? parseInt(storedCount) + 1 : 1; 
@@ -471,7 +538,12 @@
       }, []);
 
       const filteredServices = activeCategory === "all" ? SERVICES : SERVICES.filter(s => s.category === activeCategory);
-      const categoryButtons = [{ id: "all", label: "ทั้งหมด" }, { id: "thai", label: "แพทย์แผนไทย" }, { id: "chinese", label: "แพทย์แผนจีน" }, { id: "wellness", label: "Wellness" }];
+      const categoryButtons = [
+          { id: "all", label: UI_TEXT[lang].catAll }, 
+          { id: "thai", label: UI_TEXT[lang].catThai }, 
+          { id: "chinese", label: UI_TEXT[lang].catChinese }, 
+          { id: "wellness", label: UI_TEXT[lang].catWellness }
+      ];
 
       return (
         <div className="min-h-screen font-sans text-slate-800 bg-slate-50">
@@ -482,59 +554,68 @@
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <img src={ASSETS.logo} alt="Sadao Hospital Logo" className="h-10 sm:h-12 w-auto object-contain" />
-                <div><h1 className="text-sm sm:text-lg font-bold text-cyan-800 leading-tight">กลุ่มงานการแพทย์แผนไทยฯ</h1><p className="text-[10px] sm:text-xs text-slate-500">โรงพยาบาลสะเดา จ.สงขลา</p></div>
+                <div><h1 className="text-sm sm:text-lg font-bold text-cyan-800 leading-tight">{UI_TEXT[lang].title}</h1><p className="text-[10px] sm:text-xs text-slate-500">{UI_TEXT[lang].subTitle}</p></div>
               </div>
               
               <nav className="hidden md:flex items-center gap-4 lg:gap-8">
-                <a href="#home" onClick={(e) => smoothScrollTo(e, 'home')} className="text-slate-600 hover:text-cyan-600 font-medium">หน้าแรก</a>
-                <a href="#team" onClick={(e) => smoothScrollTo(e, 'team')} className="text-slate-600 hover:text-cyan-600 font-medium">บุคลากร</a>
-                <a href="#services" onClick={(e) => smoothScrollTo(e, 'services')} className="text-slate-600 hover:text-cyan-600 font-medium">บริการ</a>
-                <a href="#contact" onClick={(e) => smoothScrollTo(e, 'contact')} className="text-slate-600 hover:text-cyan-600 font-medium">ติดต่อ</a>
+                <a href="#home" onClick={(e) => smoothScrollTo(e, 'home')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuHome}</a>
+                <a href="#team" onClick={(e) => smoothScrollTo(e, 'team')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuTeam}</a>
+                <a href="#services" onClick={(e) => smoothScrollTo(e, 'services')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuService}</a>
+                <a href="#contact" onClick={(e) => smoothScrollTo(e, 'contact')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuContact}</a>
                 
+                <button onClick={toggleLang} className="flex items-center gap-1 px-3 py-1 rounded-full border border-slate-300 hover:bg-slate-100 transition-colors text-sm font-bold text-slate-600">
+                    <Icon name="globe" size={16} /> {lang === 'th' ? 'EN' : 'TH'}
+                </button>
+
                 <a href={NEW_QUEUE_LINK} target="_blank" rel="noreferrer" className="btn-glow bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-2 rounded-full font-bold shadow-lg flex items-center gap-2 ring-2 ring-emerald-500/30">
-                  <Icon name="calendar-check" size={18} /> ตรวจสอบคิว
+                  <Icon name="calendar-check" size={18} /> {UI_TEXT[lang].checkQueue}
                 </a>
               </nav>
 
-              <button className="md:hidden text-slate-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <Icon name="x" size={28} /> : <Icon name="menu" size={28} />}</button>
+              <div className="md:hidden flex items-center gap-3">
+                <button onClick={toggleLang} className="flex items-center gap-1 px-2 py-1 rounded border border-slate-300 text-xs font-bold text-slate-600">
+                    {lang === 'th' ? 'EN' : 'TH'}
+                </button>
+                <button className="text-slate-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <Icon name="x" size={28} /> : <Icon name="menu" size={28} />}</button>
+              </div>
             </div>
             
             {/* Mobile Nav */}
             {isMenuOpen && (
               <div className="md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg z-50">
                 <div className="flex flex-col py-4 px-4 space-y-3">
-                  <a href="#home" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'home'); setIsMenuOpen(false); }}>หน้าแรก</a>
-                  <a href="#team" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'team'); setIsMenuOpen(false); }}>บุคลากร</a>
-                  <a href="#services" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'services'); setIsMenuOpen(false); }}>บริการ</a>
-                  <a href="#contact" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'contact'); setIsMenuOpen(false); }}>ติดต่อ</a>
+                  <a href="#home" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'home'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuHome}</a>
+                  <a href="#team" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'team'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuTeam}</a>
+                  <a href="#services" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'services'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuService}</a>
+                  <a href="#contact" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'contact'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuContact}</a>
                   
-                  <a href={NEW_QUEUE_LINK} target="_blank" className="block w-full text-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-xl font-bold shadow-md">ตรวจสอบคิวรับบริการ</a>
+                  <a href={NEW_QUEUE_LINK} target="_blank" className="block w-full text-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-xl font-bold shadow-md">{UI_TEXT[lang].checkQueue}</a>
                 </div>
               </div>
             )}
           </header>
 
-          <HeroSlider />
+          <HeroSlider lang={lang} />
           
-          <VideoIntroduction />
+          <VideoIntroduction lang={lang} />
 
           {/* TEAM SECTION */}
           <section id="team" className="py-16 bg-white border-b border-slate-100">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold text-slate-800 mb-2">โครงสร้างบุคลากร</h3>
-                <p className="text-slate-500">ทีมงานคุณภาพ พร้อมให้บริการด้วยความใส่ใจ</p>
+                <h3 className="text-3xl font-bold text-slate-800 mb-2">{UI_TEXT[lang].teamTitle}</h3>
+                <p className="text-slate-500">{UI_TEXT[lang].teamDesc}</p>
               </div>
               <div className="flex flex-col items-center gap-10">
-                <div className="w-full max-w-lg flex justify-center">{PERSONNEL.filter(p => p.level === 'director').map(p => <PersonnelCard key={p.id} person={p} size="large" />)}</div>
-                <div className="w-full max-w-xs flex justify-center">{PERSONNEL.filter(p => p.level === 'head').map(p => <PersonnelCard key={p.id} person={p} size="medium" />)}</div>
-                <div className="grid grid-cols-2 gap-6 md:gap-8 w-full max-w-3xl">{PERSONNEL.filter(p => p.level === 'doctor').map(p => <PersonnelCard key={p.id} person={p} />)}</div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">{PERSONNEL.filter(p => p.level === 'support').map(p => <PersonnelCard key={p.id} person={p} />)}</div>
+                <div className="w-full max-w-lg flex justify-center">{PERSONNEL.filter(p => p.level === 'director').map(p => <PersonnelCard key={p.id} person={p} size="large" lang={lang} />)}</div>
+                <div className="w-full max-w-xs flex justify-center">{PERSONNEL.filter(p => p.level === 'head').map(p => <PersonnelCard key={p.id} person={p} size="medium" lang={lang} />)}</div>
+                <div className="grid grid-cols-2 gap-6 md:gap-8 w-full max-w-3xl">{PERSONNEL.filter(p => p.level === 'doctor').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}</div>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">{PERSONNEL.filter(p => p.level === 'support').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}</div>
                 <div className="w-full max-w-6xl mt-4">
                   <div className="glass-card rounded-2xl p-8 border-rose-100 bg-rose-50/30">
-                    <h4 className="text-center text-rose-800 font-bold mb-8 flex items-center justify-center gap-2 text-lg"><Icon name="users" size={24}/> ทีมผู้ช่วยแพทย์แผนไทย</h4>
+                    <h4 className="text-center text-rose-800 font-bold mb-8 flex items-center justify-center gap-2 text-lg"><Icon name="users" size={24}/> {UI_TEXT[lang].teamAssistant}</h4>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 justify-items-center">
-                      {PERSONNEL.filter(p => p.level === 'assistant_thai').map(p => (<div key={p.id} className="w-full flex justify-center"><PersonnelCard person={p} /></div>))}
+                      {PERSONNEL.filter(p => p.level === 'assistant_thai').map(p => (<div key={p.id} className="w-full flex justify-center"><PersonnelCard person={p} lang={lang} /></div>))}
                     </div>
                   </div>
                 </div>
@@ -546,26 +627,26 @@
           <section id="services" className="py-16 md:py-24 bg-slate-50">
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold text-slate-800 mb-4">บริการของเรา</h3>
-                <p className="text-slate-500 max-w-xl mx-auto">เลือกดูรายการบริการ ราคา และรายละเอียดสิทธิการรักษาได้ตามหมวดหมู่</p>
+                <h3 className="text-3xl font-bold text-slate-800 mb-4">{UI_TEXT[lang].serviceTitle}</h3>
+                <p className="text-slate-500 max-w-xl mx-auto">{UI_TEXT[lang].serviceDesc}</p>
               </div>
               <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
                 {categoryButtons.map(cat => (
-                   <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`px-6 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 shadow-sm hover:-translate-y-1 ${activeCategory === cat.id ? `${CATEGORY_THEMES[cat.id].btnActive} scale-105` : "bg-white text-slate-600 border border-slate-200 hover:border-cyan-400 hover:text-cyan-600"}`}>
+                   <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`px-6 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 shadow-sm hover:-translate-y-1 ${activeCategory === cat.id ? `${CATEGORY_THEMES[cat.id === 'all' ? 'all' : cat.id].btnActive} scale-105` : "bg-white text-slate-600 border border-slate-200 hover:border-cyan-400 hover:text-cyan-600"}`}>
                       {cat.label}
                    </button>
                 ))}
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-                {filteredServices.map(service => <ServiceCard key={service.id} service={service} />)}
+                {filteredServices.map(service => <ServiceCard key={service.id} service={service} lang={lang} />)}
               </div>
               
               <div className="mt-20 border-t border-slate-200 pt-16">
                 <div className="text-center mb-8">
                   <span className="bg-gradient-to-r from-red-600 to-amber-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-red-200 inline-flex items-center gap-2 mb-2">
-                    <Icon name="sparkles" size={16} /> สาระน่ารู้
+                    <Icon name="sparkles" size={16} /> TCM
                   </span>
-                  <h3 className="text-2xl font-bold text-slate-800">เกร็ดความรู้แพทย์แผนจีน</h3>
+                  <h3 className="text-2xl font-bold text-slate-800">{UI_TEXT[lang].knowledgeTitle}</h3>
                 </div>
                 <InfoSlider />
               </div>
@@ -576,8 +657,8 @@
           <section className="bg-gradient-to-r from-amber-50 to-orange-50 py-16 border-y border-amber-100">
             <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-8 text-center md:text-left">
               <div className="bg-white p-6 rounded-full shadow-xl shadow-amber-200 animate-float"><Icon name="star" size={48} className="text-amber-500 fill-current" /></div>
-              <div><h4 className="text-2xl font-bold text-amber-800 mb-2">โปรโมชั่นพิเศษ! ฝังเข็มหน้าใส</h4><p className="text-amber-700 text-lg">คอร์ส 10 ครั้ง ราคาพิเศษเพียง <span className="text-3xl font-bold text-red-600 mx-2">2,600.-</span> (จากปกติ 3,000.-)</p></div>
-              <a href={CONTACT_INFO.line} target="_blank" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all">สอบถามเพิ่มเติม</a>
+              <div><h4 className="text-2xl font-bold text-amber-800 mb-2">{UI_TEXT[lang].promoTitle}</h4><p className="text-amber-700 text-lg">{UI_TEXT[lang].promoDesc} <span className="text-3xl font-bold text-red-600 mx-2">2,600.-</span> {UI_TEXT[lang].promoNormal}</p></div>
+              <a href={CONTACT_INFO.line} target="_blank" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all">{UI_TEXT[lang].menuContact}</a>
             </div>
           </section>
 
@@ -587,24 +668,24 @@
               <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white">
                 <div className="grid md:grid-cols-2">
                   <div className="p-10 md:p-16 flex flex-col justify-center">
-                    <h3 className="text-3xl font-bold mb-8">ติดต่อสอบถาม & จองคิว</h3>
+                    <h3 className="text-3xl font-bold mb-8">{UI_TEXT[lang].contactTitle}</h3>
                     <div className="space-y-8">
                       <div className="flex items-start gap-5">
                         <div className="bg-cyan-500/20 p-3 rounded-lg"><Icon name="map-pin" className="text-cyan-400" size={28} /></div>
-                        <div><h5 className="font-bold text-xl mb-1">สถานที่ตั้ง</h5><p className="text-slate-300 text-lg">{CONTACT_INFO.location}</p><p className="text-sm font-semibold text-cyan-400 mt-1 bg-cyan-900/30 px-2 py-1 rounded w-fit">ชั้น 4 ตึกอุบัติเหตุ 4 ชั้น (ตึกมรกต)</p></div>
+                        <div><h5 className="font-bold text-xl mb-1">{UI_TEXT[lang].locTitle}</h5><p className="text-slate-300 text-lg">{CONTACT_INFO.location[lang]}</p><p className="text-sm font-semibold text-cyan-400 mt-1 bg-cyan-900/30 px-2 py-1 rounded w-fit">{UI_TEXT[lang].locDesc}</p></div>
                       </div>
                       <div className="flex items-start gap-5">
                         <div className="bg-cyan-500/20 p-3 rounded-lg"><Icon name="clock" className="text-cyan-400" size={28} /></div>
                         <div className="w-full">
-                          <h5 className="font-bold text-xl mb-3">เวลาทำการ</h5>
-                          <div className="mb-4 pl-4 border-l-2 border-emerald-500"><span className="block text-emerald-400 font-bold mb-1">แพทย์แผนไทย</span><p className="text-slate-300 text-sm">จันทร์-ศุกร์ : 08.00-20.00 น.<br/>เสาร์-นักขัตฤกษ์ : 08.00-16.00 น.<br/><span className="text-rose-400 font-bold">⛔ หยุดวันอาทิตย์</span></p></div>
-                          <div className="pl-4 border-l-2 border-amber-500"><span className="block text-amber-400 font-bold mb-1">แพทย์แผนจีน</span><p className="text-slate-300 text-sm">จันทร์-ศุกร์ : 08.00-16.00 น.<br/><span className="text-rose-400 font-bold">⛔ ปิดวันเสาร์-อาทิตย์-นักขัตฤกษ์</span></p></div>
-                          <p className="text-xs text-green-400 mt-2 flex items-center gap-1"><Icon name="check-circle" size={12} /> สามารถนัดจองคิวล่วงหน้าได้</p>
+                          <h5 className="font-bold text-xl mb-3">{UI_TEXT[lang].timeTitle}</h5>
+                          <div className="mb-4 pl-4 border-l-2 border-emerald-500"><span className="block text-emerald-400 font-bold mb-1">{UI_TEXT[lang].timeThai}</span><p className="text-slate-300 text-sm whitespace-pre-line">{UI_TEXT[lang].timeThaiDesc}</p></div>
+                          <div className="pl-4 border-l-2 border-amber-500"><span className="block text-amber-400 font-bold mb-1">{UI_TEXT[lang].timeChinese}</span><p className="text-slate-300 text-sm whitespace-pre-line">{UI_TEXT[lang].timeChineseDesc}</p></div>
+                          <p className="text-xs text-green-400 mt-2 flex items-center gap-1"><Icon name="check-circle" size={12} /> {UI_TEXT[lang].canBook}</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-5">
                         <div className="bg-cyan-500/20 p-3 rounded-lg"><Icon name="phone" className="text-cyan-400" size={28} /></div>
-                        <div><h5 className="font-bold text-xl mb-1">เบอร์โทรศัพท์</h5><p className="text-slate-300 text-lg">{CONTACT_INFO.phone1}</p><p className="text-slate-300 text-lg">{CONTACT_INFO.phone2}</p></div>
+                        <div><h5 className="font-bold text-xl mb-1">{UI_TEXT[lang].phoneTitle}</h5><p className="text-slate-300 text-lg">{CONTACT_INFO.phone1}</p><p className="text-slate-300 text-lg">{CONTACT_INFO.phone2}</p></div>
                       </div>
                     </div>
                     <div className="mt-12 flex flex-wrap gap-4">
@@ -617,7 +698,7 @@
                   <div className="relative h-80 md:h-auto bg-slate-800">
                     <img src="https://img5.pic.in.th/file/secure-sv1/2c481a861621360399d9fa5ae5e4522e.png" alt="Atmosphere" className="w-full h-full object-cover opacity-50 mix-blend-overlay" />
                     <div className="absolute inset-0 flex items-center justify-center p-10 text-center">
-                        <div><Icon name="info" size={64} className="mx-auto mb-6 text-cyan-400 animate-pulse"/><p className="text-xl font-light italic">"เรามุ่งมั่นให้บริการด้วยมาตรฐาน<br/>ผสมผสานภูมิปัญญาไทยเพื่อสุขภาพของคุณ"</p></div>
+                        <div><Icon name="info" size={64} className="mx-auto mb-6 text-cyan-400 animate-pulse"/><p className="text-xl font-light italic">{UI_TEXT[lang].motto}</p></div>
                     </div>
                   </div>
                 </div>
@@ -625,18 +706,17 @@
             </div>
           </section>
 
-          <FAQSection />
+          <FAQSection lang={lang} />
 
           <footer className="bg-slate-900 text-slate-400 py-10 text-center text-sm border-t border-slate-800 relative z-10">
             <div className="container mx-auto px-4">
                 <img src={ASSETS.logo} alt="Logo" className="h-12 mx-auto mb-6 opacity-80 grayscale hover:grayscale-0 transition-all"/>
-                <p className="text-lg mb-2 text-slate-300">© 2025 กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก โรงพยาบาลสะเดา</p>
-                <p className="text-xs text-slate-600 mb-6">ออกแบบและพัฒนาเพื่อการประชาสัมพันธ์ข้อมูลบริการ โดย พท.ทศพร คงสุขนิรันดร์</p>
+                <p className="text-lg mb-2 text-slate-300">© 2025 {UI_TEXT[lang].title} {UI_TEXT[lang].subTitle}</p>
+                <p className="text-xs text-slate-600 mb-6">Designed and Developed by Mr.Tossaporn Khongsuknirun</p>
                 <div className="flex items-center justify-center gap-2 text-xs bg-slate-800/50 py-2 px-4 rounded-full w-fit mx-auto border border-slate-700">
                   <Icon name="users" size={14} className="text-emerald-400" />
-                  <span>ผู้เข้าชมเว็บไซต์: <span className="font-mono font-bold text-emerald-400 text-base ml-1">{viewCount.toLocaleString()}</span> ครั้ง</span>
+                  <span>Views: <span className="font-mono font-bold text-emerald-400 text-base ml-1">{viewCount.toLocaleString()}</span></span>
                 </div>
-                <div className="mt-2 text-[10px] text-slate-700">*จำนวนการเข้าชมอ้างอิงจากอุปกรณ์นี้</div>
             </div>
           </footer>
         </div>
@@ -648,4 +728,3 @@
   </script>
 </body>
 </html>
-
