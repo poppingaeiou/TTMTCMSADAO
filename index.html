@@ -7,13 +7,13 @@
   <link rel="icon" href="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" type="image/png">
   <link rel="apple-touch-icon" href="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png">
   <meta name="description" content="บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness โรงพยาบาลสะเดา">
-  
+   
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
   <script src="https://unpkg.com/lucide@0.292.0"></script>
-  
+   
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap');
     
@@ -245,6 +245,7 @@
       { id: 2, name: { th: "พท.ศุภชัย อุไร", en: "Mr. Suphachai Ourai" }, nickname: { th: "ชาย", en: "Child" }, role: { th: "หัวหน้ากลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก", en: "Head of TTM & TCM Department" }, subRole: { th: "แพทย์แผนไทยชำนาญการ", en: "Experienced Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/-52d2d1ee6993cded.png", level: "head" },
       { id: 3, name: { th: "พท.ทศพร คงสุขนิรันดร์", en: "Mr. Thodsaporn Kongsookniran" }, nickname: { th: "ปิง", en: "Ping" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img2.pic.in.th/pic/-98ea2b365e59a684.png", level: "doctor" },
       { id: 4, name: { th: "พจ.พรเพชร เพชรคงแก้ว", en: "Ms. Pornpetch Petchkonggaew" }, nickname: { th: "บิ๋ม", en: "Bim" }, role: { th: "แพทย์แผนจีน", en: "Chinese Medicine Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/-a2b8b51ae68cca5f.png", level: "doctor" },
+      { id: 15, name: { th: "พท.พนิตตา กีรติธราธร", en: "Ms. Panitta Kilatitaratron" }, nickname: { th: "นุ่น", en: "Nun" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/c6338f3e448d27c53a7b41473f21a72c.png", level: "doctor" },
       { id: 5, name: { th: "คุณจินดา จันทร์หอม", en: "Ms. Jinda Janhom" }, nickname: { th: "เจี๊ยบ", en: "Jeab" }, role: { th: "พนักงานช่วยเหลือคนไข้", en: "Nurse Aide" }, image: "https://img2.pic.in.th/pic/93b060e9e4b3fc9a9070d5ac2768c879.png", level: "support" },
       { id: 6, name: { th: "คุณเจนจิรา หมอราช", en: "Mrs. Janejira Morrat" }, nickname: { th: "เจน", en: "Jane" }, role: { th: "พนักงานบริการ", en: "Service Staff" }, image: "https://img5.pic.in.th/file/secure-sv1/-48f38d85a639021d.png", level: "support" },
       { id: 7, name: { th: "คุณอทิตย์ติญา แดงนุ้ย", en: "Ms. Atittiya Dangnui " }, nickname: { th: "ฟา", en: "Fa" }, role: { th: "ผช.แพทย์แผนจีน", en: "TCM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/-eb41ee4792de0bb6.png", level: "support" },
@@ -314,7 +315,7 @@
             </div>
           ))}
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50"></div>
-          
+           
           <div className="absolute inset-0 flex items-center justify-center text-center px-4 z-10">
             <div className="max-w-3xl animate-fade-in">
               <span className="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur-md text-cyan-200 text-sm mb-4 border border-white/20">
@@ -556,7 +557,7 @@
                 <img src={ASSETS.logo} alt="Sadao Hospital Logo" className="h-10 sm:h-12 w-auto object-contain" />
                 <div><h1 className="text-sm sm:text-lg font-bold text-cyan-800 leading-tight">{UI_TEXT[lang].title}</h1><p className="text-[10px] sm:text-xs text-slate-500">{UI_TEXT[lang].subTitle}</p></div>
               </div>
-              
+               
               <nav className="hidden md:flex items-center gap-4 lg:gap-8">
                 <a href="#home" onClick={(e) => smoothScrollTo(e, 'home')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuHome}</a>
                 <a href="#team" onClick={(e) => smoothScrollTo(e, 'team')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuTeam}</a>
@@ -609,7 +610,12 @@
               <div className="flex flex-col items-center gap-10">
                 <div className="w-full max-w-lg flex justify-center">{PERSONNEL.filter(p => p.level === 'director').map(p => <PersonnelCard key={p.id} person={p} size="large" lang={lang} />)}</div>
                 <div className="w-full max-w-xs flex justify-center">{PERSONNEL.filter(p => p.level === 'head').map(p => <PersonnelCard key={p.id} person={p} size="medium" lang={lang} />)}</div>
-                <div className="grid grid-cols-2 gap-6 md:gap-8 w-full max-w-3xl">{PERSONNEL.filter(p => p.level === 'doctor').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}</div>
+                
+                {/* Modified Grid to support 3 doctors */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-5xl">
+                    {PERSONNEL.filter(p => p.level === 'doctor').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}
+                </div>
+
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">{PERSONNEL.filter(p => p.level === 'support').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}</div>
                 <div className="w-full max-w-6xl mt-4">
                   <div className="glass-card rounded-2xl p-8 border-rose-100 bg-rose-50/30">
@@ -728,8 +734,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
