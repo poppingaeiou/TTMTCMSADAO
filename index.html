@@ -1,519 +1,147 @@
 <!DOCTYPE html>
-
 <html lang="th">
-
 <head>
-
   <meta charset="UTF-8">
-
   <title>กลุ่มงานการแพทย์แผนไทยฯ รพ.สะเดา</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link rel="icon" href="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" type="image/png">
-
-  <link rel="apple-touch-icon" href="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png">
-
   <meta name="description" content="บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness โรงพยาบาลสะเดา">
-
-   
-
+  
   <script src="https://cdn.tailwindcss.com"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js" crossorigin></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js" crossorigin></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
-
   <script src="https://unpkg.com/lucide@0.292.0"></script>
-
-   
-
+  
   <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
     
-
-    /* Global Styles */
-
-    body { font-family: 'Sarabun', sans-serif; -webkit-font-smoothing: antialiased; }
-
+    body { font-family: 'Sarabun', sans-serif; -webkit-font-smoothing: antialiased; background-color: #f8fafc; }
     .font-prompt { font-family: 'Prompt', sans-serif; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
 
-    
-
-    html { 
-
-      scroll-behavior: smooth; 
-
-      scroll-padding-top: 100px; 
-
+    /* Custom Shape for the "Premier" Card Style */
+    .premier-card-clip {
+        clip-path: polygon(
+            15% 0%, 85% 0%, 
+            100% 15%, 100% 85%, 
+            85% 100%, 15% 100%, 
+            0% 85%, 0% 15%
+        );
     }
-
     
-
-    /* Custom Animations & Effects */
+    .premier-name-plate {
+        clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+    }
 
     .hover-lift { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease; }
-
-    .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-
+    .hover-lift:hover { transform: translateY(-5px); }
     
-
     .glass-card {
-
         background: rgba(255, 255, 255, 0.95);
-
         backdrop-filter: blur(12px);
-
-        -webkit-backdrop-filter: blur(12px);
-
         border: 1px solid rgba(255, 255, 255, 0.8);
-
     }
 
+    /* Gradients for Roles */
+    .bg-role-director { background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%); }
+    .bg-role-head { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+    .bg-role-doctor { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+    .bg-role-support { background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%); }
 
-
-    .btn-glow {
-
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-
-      transition: all 0.3s ease;
-
-    }
-
-    .btn-glow:hover {
-
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
-
-      transform: translateY(-2px);
-
-    }
-
-
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
-
-
-
-    .video-container {
-
-      position: relative;
-
-      padding-bottom: 56.25%;
-
-      height: 0;
-
-      overflow: hidden;
-
-      border-radius: 1rem;
-
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-
-      background: #000;
-
-    }
-
-    .video-container iframe {
-
-      position: absolute;
-
-      top: 0; left: 0; width: 100%; height: 100%;
-
-    }
-
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
   </style>
-
 </head>
-
 <body class="bg-slate-50 text-slate-800">
-
-
-
-  <div id="status-container" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
-
-    <div id="loader" class="text-center">
-
-      <div class="w-16 h-16 border-4 border-slate-100 border-t-emerald-500 rounded-full animate-spin mx-auto mb-4"></div>
-
-      <p class="text-slate-500 animate-pulse">Loading...</p>
-
-    </div>
-
-  </div>
-
-
 
   <div id="root" class="opacity-0 transition-opacity duration-500"></div>
 
-
-
   <script type="text/babel">
-
     const { useState, useEffect, useRef } = React;
 
-
+    // --- UTILS ---
+    const Icon = ({ name, size = 24, className = "" }) => {
+      const iconRef = useRef(null);
+      useEffect(() => {
+        if (window.lucide && iconRef.current) {
+          window.lucide.createIcons({
+            root: iconRef.current.parentNode,
+            icons: { [name]: true },
+            attrs: { class: className, width: size, height: size }
+          });
+        }
+      }, [name, className, size]);
+      return <i ref={iconRef} data-lucide={name} className={className}></i>;
+    };
 
     const smoothScrollTo = (e, id) => {
-
       e.preventDefault();
-
       const element = document.getElementById(id);
-
       if (element) {
-
         const headerOffset = 100;
-
         const elementPosition = element.getBoundingClientRect().top;
-
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
         window.scrollTo({ top: offsetPosition, behavior: "smooth" });
-
       }
-
     };
 
-
-
-    const Icon = ({ name, size = 24, className = "" }) => {
-
-      const iconRef = useRef(null);
-
-      useEffect(() => {
-
-        if (window.lucide && iconRef.current) {
-
-          window.lucide.createIcons({
-
-            root: iconRef.current.parentNode,
-
-            icons: { [name]: true },
-
-            nameAttr: 'data-lucide',
-
-            attrs: { class: className, width: size, height: size }
-
-          });
-
-        }
-
-      }, [name, className, size]);
-
-      return <i ref={iconRef} data-lucide={name} className={className}></i>;
-
-    };
-
-
-
-    const SocialButton = ({ iconName, href, colorClass, label, customIcon }) => (
-
-      <a href={href} target="_blank" rel="noopener noreferrer" 
-
-          className={`flex items-center gap-2 px-4 py-2 rounded-full text-white shadow-md transition-transform transform hover:scale-105 ${colorClass}`}>
-
-        {customIcon ? customIcon : <Icon name={iconName} size={20} />}
-
-        <span className="text-sm font-medium">{label}</span>
-
-      </a>
-
-    );
-
-
-
-    // --- DATA & TRANSLATIONS ---
-
+    // --- DATA ---
     const NEW_QUEUE_LINK = "https://poppingaeiou.github.io/TTMSADAOHOS/";
-
-    const YOUTUBE_VIDEO_ID = "_nQcj7w2pPQ";
-
-
-
+    const CHECK_ELEMENT_LINK = "https://poppingaeiou.github.io/SDH_Balance_TTM/";
     const CONTACT_INFO = {
-
-      phone1: "074-379-994 ต่อ 410",
-
-      phone2: "084-267-1735",
-
-      line: "https://lin.ee/Ip6j7HP",
-
-      facebook: "https://www.facebook.com/ttmsadao/",
-
-      tiktok: "https://www.tiktok.com/@ttm_sadaohos",
-
-      youtube: "https://www.youtube.com/@TTM_TCM_SADAO",
-
-      location: {
-
-          th: "โรงพยาบาลสะเดา ต.สะเดา อ.สะเดา จ.สงขลา",
-
-          en: "Sadao Hospital, Sadao, Songkhla, Thailand"
-
-      }
-
+        phone1: "074-379-994 ต่อ 410",
+        phone2: "084-267-1735",
+        line: "https://lin.ee/Ip6j7HP",
+        location: { th: "โรงพยาบาลสะเดา ต.สะเดา อ.สะเดา จ.สงขลา" }
     };
-
-
-
-    const ASSETS = { logo: "https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" };
-
-    const HERO_IMAGES = [
-
-      "https://img5.pic.in.th/file/secure-sv1/d26f2357c0618da568d3dcf464837fda.png",
-
-      "https://img5.pic.in.th/file/secure-sv1/52083c99d955995f60b4a9dd8448920a.png",
-
-      "https://img2.pic.in.th/pic/2e56ebb3c838125fd55c9db5dcd51baf.png"
-
-    ];
-
-    const CHINESE_SLIDES = [
-
-      "https://img5.pic.in.th/file/secure-sv1/-01c93a87008cc3d05e.jpg",
-
-      "https://img2.pic.in.th/pic/-02b4ed586a4999c82b.png",
-
-      "https://img2.pic.in.th/pic/-030112561b55359c2a.png"
-
-    ];
-
-
-
+    
+    // UI TEXT
     const UI_TEXT = {
-
         th: {
-
             title: "กลุ่มงานการแพทย์แผนไทยฯ",
-
             subTitle: "โรงพยาบาลสะเดา จ.สงขลา",
-
-            menuHome: "หน้าแรก",
-
-            menuTeam: "บุคลากร",
-
-            menuService: "บริการ",
-
-            menuContact: "ติดต่อ",
-
+            menuHome: "หน้าแรก", menuTeam: "บุคลากร", menuService: "บริการ", menuContact: "ติดต่อ",
             checkQueue: "ตรวจสอบคิว",
-
-            heroTag: "✨ ศูนย์รวมศาสตร์การแพทย์แผนไทยและจีนที่ทันสมัยที่สุดในสะเดา",
-
-            heroTitle1: "สุขภาพดี เริ่มต้นที่",
-
-            heroTitle2: "การดูแลใส่ใจ",
-
-            heroDesc: "ให้บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness เพื่อสุขภาพ โดยทีมผู้เชี่ยวชาญ โรงพยาบาลสะเดา",
-
-            viewService: "ดูรายการบริการ",
-
-            introTitle: "แนะนำบริการของเรา",
-
-            introDesc: "ชมวิดีโอแนะนำคลินิกแพทย์แผนไทยและการแพทย์ทางเลือก",
-
+            checkElement: "ตรวจธาตุเจ้าเรือน",
+            checkElementDesc: "วิเคราะห์สมดุลร่างกายด้วยตนเองตามศาสตร์แพทย์แผนไทย",
+            heroTitle1: "สุขภาพดี เริ่มต้นที่", heroTitle2: "การดูแลใส่ใจ",
             teamTitle: "โครงสร้างบุคลากร",
-
-            teamDesc: "ทีมงานคุณภาพ พร้อมให้บริการด้วยความใส่ใจ",
-
-            teamAssistant: "ทีมผู้ช่วยแพทย์แผนไทย",
-
-            serviceTitle: "บริการของเรา",
-
-            serviceDesc: "เลือกดูรายการบริการ ราคา และรายละเอียดสิทธิการรักษาได้ตามหมวดหมู่",
-
-            catAll: "ทั้งหมด",
-
-            catThai: "แพทย์แผนไทย",
-
-            catChinese: "แพทย์แผนจีน",
-
-            catWellness: "Wellness",
-
-            knowledgeTitle: "เกร็ดความรู้แพทย์แผนจีน",
-
-            promoTitle: "โปรโมชั่นพิเศษ! ฝังเข็มหน้าใส",
-
-            promoDesc: "คอร์ส 10 ครั้ง ราคาพิเศษเพียง",
-
-            promoNormal: "(จากปกติ 3,000.-)",
-
-            contactTitle: "ติดต่อสอบถาม & จองคิว",
-
-            locTitle: "สถานที่ตั้ง",
-
-            locDesc: "ชั้น 4 ตึกอุบัติเหตุ 4 ชั้น (ตึกมรกต)",
-
-            timeTitle: "เวลาทำการ",
-
-            timeThai: "แพทย์แผนไทย",
-
-            timeThaiDesc: "จันทร์-ศุกร์ : 08.00-20.00 น.\nเสาร์-นักขัตฤกษ์ : 08.00-16.00 น.\n⛔ หยุดวันอาทิตย์",
-
-            timeChinese: "แพทย์แผนจีน",
-
-            timeChineseDesc: "จันทร์-ศุกร์ : 08.00-16.00 น.\n⛔ ปิดวันเสาร์-อาทิตย์-นักขัตฤกษ์",
-
-            canBook: "สามารถนัดจองคิวล่วงหน้าได้",
-
-            phoneTitle: "เบอร์โทรศัพท์",
-
-            motto: "\"เรามุ่งมั่นให้บริการด้วยมาตรฐาน ผสมผสานภูมิปัญญาไทยเพื่อสุขภาพของคุณ\"",
-
-            faqTitle: "คำถามที่พบบ่อย",
-
-            rights: { gold: "สิทธิบัตรทอง", civil: "สิทธิข้าราชการ", sso: "สิทธิประกันสังคม", self: "ชำระเงินเอง" },
-
-            claim: "เบิกได้",
-
-            pay: "จ่าย",
-
-            baht: "บาท",
-
-            mins: "นาที",
-
-            times: "ครั้ง",
-
-            hour: "ชั่วโมง"
-
+            teamDirector: "ผู้อำนวยการ", teamHead: "หัวหน้ากลุ่มงาน", teamDoctor: "ทีมแพทย์แผนไทยและแพทย์แผนจีน", teamSupport: "ทีมสนับสนุนและผู้ช่วยแพทย์",
+            serviceTitle: "บริการของเรา", serviceDesc: "เลือกดูรายการบริการ ราคา และรายละเอียดสิทธิการรักษา"
         },
-
         en: {
-
             title: "TTM & TCM Department",
-
             subTitle: "Sadao Hospital, Songkhla",
-
-            menuHome: "Home",
-
-            menuTeam: "Team",
-
-            menuService: "Services",
-
-            menuContact: "Contact",
-
+            menuHome: "Home", menuTeam: "Team", menuService: "Services", menuContact: "Contact",
             checkQueue: "Check Queue",
-
-            heroTag: "✨ The Most Modern Thai & Chinese Medicine Center in Sadao",
-
-            heroTitle1: "Good Health Starts With",
-
-            heroTitle2: "Great Care",
-
-            heroDesc: "Providing Thai Traditional Medicine, Chinese Medicine, and Wellness services by expert team at Sadao Hospital.",
-
-            viewService: "View Services",
-
-            introTitle: "Our Introduction",
-
-            introDesc: "Watch video introduction of our clinic and services.",
-
+            checkElement: "Element Check",
+            checkElementDesc: "Self-assessment of body elements based on Thai Medicine",
+            heroTitle1: "Good Health Starts With", heroTitle2: "Great Care",
             teamTitle: "Our Team",
-
-            teamDesc: "Quality team ready to serve with care.",
-
-            teamAssistant: "TTM Assistant Team",
-
-            serviceTitle: "Our Services",
-
-            serviceDesc: "Browse services, prices, and reimbursement rights by category.",
-
-            catAll: "All",
-
-            catThai: "Thai Medicine",
-
-            catChinese: "Chinese Med",
-
-            catWellness: "Wellness",
-
-            knowledgeTitle: "TCM Knowledge",
-
-            promoTitle: "Special Promo! Facial Acupuncture",
-
-            promoDesc: "10 Sessions Course only",
-
-            promoNormal: "(Normal 3,000.-)",
-
-            contactTitle: "Contact & Booking",
-
-            locTitle: "Location",
-
-            locDesc: "4th Floor, Accident Building (Emerald Bldg)",
-
-            timeTitle: "Working Hours",
-
-            timeThai: "Thai Medicine",
-
-            timeThaiDesc: "Mon-Fri : 08.00-20.00\nSat-Public Holiday : 08.00-16.00\n⛔ Closed on Sunday",
-
-            timeChinese: "Chinese Medicine",
-
-            timeChineseDesc: "Mon-Fri : 08.00-16.00\n⛔ Closed Sat-Sun-Public Holiday",
-
-            canBook: "Advance booking available",
-
-            phoneTitle: "Phone Number",
-
-            motto: "\"We are committed to standard service, blending Thai wisdom for your health.\"",
-
-            faqTitle: "FAQ",
-
-            rights: { gold: "Gold Card (UC)", civil: "Civil Servant", sso: "Social Security", self: "Self-Pay" },
-
-            claim: "Claimable",
-
-            pay: "Pay",
-
-            baht: "THB",
-
-            mins: "Mins",
-
-            times: "Times",
-
-            hour: "Hour"
-
+            teamDirector: "Director", teamHead: "Head of Department", teamDoctor: "TTM & TCM Doctors", teamSupport: "Support Team",
+            serviceTitle: "Our Services", serviceDesc: "Browse services, prices, and reimbursement rights"
         }
-
     };
 
-
-
+    // PERSONNEL DATA (Updated Logic)
     const PERSONNEL = [
-
-      { id: 1, name: { th: "นพ.ชัยวุฒิ สุขสมานวงศ์", en: "Dr. Chaiwut Suksamanwong" }, nickname: "", role: { th: "รักษาการในตำแหน่ง ผู้อำนวยการโรงพยาบาลสะเดา", en: "Acting Director of Sadao Hospital" }, subRole: { th: "นายแพทย์เชี่ยวชาญ (ด้านเวชกรรมป้องกัน)", en: "Expert Physician (Preventive Medicine)" }, image: "https://img2.pic.in.th/.75218bf22f377224.png", level: "director" },
-
-      { id: 2, name: { th: "พท.ศุภชัย อุไร", en: "Mr. Suphachai Ourai" }, nickname: { th: "ชาย", en: "Child" }, role: { th: "หัวหน้ากลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก", en: "Head of TTM & TCM Department" }, subRole: { th: "แพทย์แผนไทยชำนาญการ", en: "Experienced Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/c1864a8536f0da1b285e145ed41050a5.png", level: "head" },
-
-      { id: 3, name: { th: "พท.ทศพร คงสุขนิรันดร์", en: "Mr. Thodsaporn Kongsookniran" }, nickname: { th: "ปิง", en: "Ping" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/1b279ccd79f91eea28676a2716928877.png", level: "doctor" },
-
-      { id: 4, name: { th: "พจ.พรเพชร เพชรคงแก้ว", en: "Ms. Pornpetch Petchkonggaew" }, nickname: { th: "บิ๋ม", en: "Bim" }, role: { th: "แพทย์แผนจีน", en: "Chinese Medicine Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/4e29260f0e0efb8981752c8f387e165e.png", level: "doctor" },
-
-      { id: 15, name: { th: "พท.พนิตตา กีรติธราธร", en: "Ms. Panitta Kilatitaratron" }, nickname: { th: "นุ่น", en: "Nun" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img2.pic.in.th/8721ae3ccb0abdb00619aa18dfdfc307.png", level: "doctor" },
-
-      { id: 5, name: { th: "คุณจินดา จันทร์หอม", en: "Ms. Jinda Janhom" }, nickname: { th: "เจี๊ยบ", en: "Jeab" }, role: { th: "พนักงานช่วยเหลือคนไข้", en: "Nurse Aide" }, image: "https://img2.pic.in.th/ea9cd8060f1a4674eb032026ba66397b.png", level: "support" },
-
-      { id: 6, name: { th: "คุณเจนจิรา หมอราช", en: "Mrs. Janejira Morrat" }, nickname: { th: "เจน", en: "Jane" }, role: { th: "พนักงานบริการ", en: "Service Staff" }, image: "https://img5.pic.in.th/file/secure-sv1/feda276cef9020a84b7d90b55cf878bb.png", level: "support" },
-
-      { id: 7, name: { th: "คุณอทิตย์ติญา แดงนุ้ย", en: "Ms. Atittiya Dangnui " }, nickname: { th: "ฟา", en: "Fa" }, role: { th: "ผช.แพทย์แผนจีน", en: "TCM Assistant" }, image: "https://img2.pic.in.th/e44018508f77341c3a3104d7138f02ee.png", level: "support" },
-
-      { id: 8, name: { th: "คุณรจนา จันเงิน", en: "Mrs. Rotjana Channgoen" }, nickname: { th: "แหม่ม", en: "Maam" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/0828c95359229ff084c17c2b44a978dd.png", level: "assistant_thai" },
-
-      { id: 9, name: { th: "คุณอรรถพล อั้นซ้าย", en: "Mr. Attapon Ansai" }, nickname: { th: "บ่าว", en: "Bao" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/dd8c597bf4c72fb33954291ce82ba70f.png", level: "assistant_thai" },
-
-      { id: 10, name: { th: "คุณศินารัตน์ แซ่ตั้ง", en: "Ms. Sinarat Saetang" }, nickname: { th: "ซี", en: "C" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/4bbe198f1a10b5ba6b9c5e2169b33cf6.png", level: "assistant_thai" },
-
-      { id: 11, name: { th: "คุณจุฑามาศ เว้นบาป", en: "Ms. Jutamat Wenbap" }, nickname: { th: "ฝน", en: "Fon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/2977764348cf43652c892a78830e688a.png", level: "assistant_thai" },
-
-      { id: 12, name: { th: "คุณรัตน์ชนก พูลคุ้ม", en: "Ms. Ratchanok Poolkhum" }, nickname: { th: "กวาง", en: "Kwang" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/5105a7c4b12e851de431b532ea9ffe1c.png", level: "assistant_thai" },
-
-      { id: 13, name: { th: "คุณนิกษ์นิภา คงสุวรรณ์", en: "Ms. Niknipha Khongsuwan" }, nickname: { th: "การ์ตูน", en: "Kartoon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/6473f3ad93a1fdd8480e0cb2c2d76a5a.png", level: "assistant_thai" },
-
-      { id: 14, name: { th: "คุณณิชาภัทร ทองบริบูรณ์", en: "Ms. Nichapat Thongboriboon" }, nickname: { th: "วาวา", en: "Wawa" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/f13809d649f219e20d375b5a271ff9f8.png", level: "assistant_thai" }
-
+      { id: 1, name: { th: "นพ.ชัยวุฒิ สุขสมานวงศ์", en: "Dr. Chaiwut Suksamanwong" }, role: { th: "รักษาการในตำแหน่ง ผู้อำนวยการ", en: "Acting Director" }, subRole: { th: "โรงพยาบาลสะเดา", en: "Sadao Hospital" }, image: "https://img2.pic.in.th/.75218bf22f377224.png", level: "director" },
+      { id: 2, name: { th: "พท.ศุภชัย อุไร", en: "Mr. Suphachai Ourai" }, role: { th: "หัวหน้ากลุ่มงานฯ", en: "Head of Department" }, subRole: { th: "แพทย์แผนไทยชำนาญการ", en: "Experienced TTM Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/c1864a8536f0da1b285e145ed41050a5.png", level: "head" },
+      { id: 3, name: { th: "พท.ทศพร คงสุขนิรันดร์", en: "Mr. Thodsaporn" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/1b279ccd79f91eea28676a2716928877.png", level: "doctor" },
+      { id: 4, name: { th: "พจ.พรเพชร เพชรคงแก้ว", en: "Ms. Pornpetch" }, role: { th: "แพทย์แผนจีน", en: "Chinese Medicine Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/4e29260f0e0efb8981752c8f387e165e.png", level: "doctor" },
+      { id: 15, name: { th: "พท.พนิตตา กีรติธราธร", en: "Ms. Panitta" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img2.pic.in.th/8721ae3ccb0abdb00619aa18dfdfc307.png", level: "doctor" },
+      // Support Staff Group
+      { id: 5, name: { th: "คุณจินดา จันทร์หอม", en: "Ms. Jinda" }, role: { th: "พนักงานช่วยเหลือคนไข้", en: "Nurse Aide" }, image: "https://img2.pic.in.th/ea9cd8060f1a4674eb032026ba66397b.png", level: "support" },
+      { id: 6, name: { th: "คุณเจนจิรา หมอราช", en: "Mrs. Janejira" }, role: { th: "พนักงานบริการ", en: "Service Staff" }, image: "https://img5.pic.in.th/file/secure-sv1/feda276cef9020a84b7d90b55cf878bb.png", level: "support" },
+      { id: 7, name: { th: "คุณอทิตย์ติญา แดงนุ้ย", en: "Ms. Atittiya" }, role: { th: "ผช.แพทย์แผนจีน", en: "TCM Assistant" }, image: "https://img2.pic.in.th/e44018508f77341c3a3104d7138f02ee.png", level: "support" },
+      { id: 8, name: { th: "คุณรจนา จันเงิน", en: "Mrs. Rotjana" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/0828c95359229ff084c17c2b44a978dd.png", level: "support" },
+      { id: 9, name: { th: "คุณอรรถพล อั้นซ้าย", en: "Mr. Attapon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/dd8c597bf4c72fb33954291ce82ba70f.png", level: "support" },
+      { id: 10, name: { th: "คุณศินารัตน์ แซ่ตั้ง", en: "Ms. Sinarat" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/4bbe198f1a10b5ba6b9c5e2169b33cf6.png", level: "support" },
+      { id: 11, name: { th: "คุณจุฑามาศ เว้นบาป", en: "Ms. Jutamat" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/2977764348cf43652c892a78830e688a.png", level: "support" },
+      { id: 12, name: { th: "คุณรัตน์ชนก พูลคุ้ม", en: "Ms. Ratchanok" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/5105a7c4b12e851de431b532ea9ffe1c.png", level: "support" },
+      { id: 13, name: { th: "คุณนิกษ์นิภา คงสุวรรณ์", en: "Ms. Niknipha" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/6473f3ad93a1fdd8480e0cb2c2d76a5a.png", level: "support" },
+      { id: 14, name: { th: "คุณณิชาภัทร ทองบริบูรณ์", en: "Ms. Nichapat" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/f13809d649f219e20d375b5a271ff9f8.png", level: "support" }
     ];
 
 
@@ -781,3 +409,4 @@
       <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3 animate-fade-in">
 
         <a href={`tel:${CONTACT_INFO.phone2.replace(/-/g, '')}`} className="bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-lg shadow-emerald-200 transition-transform hover:scale-110 flex items-center justify-center">
+
