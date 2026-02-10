@@ -2,9 +2,10 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>กลุ่มงานการแพทย์แผนไทยฯ รพ.สะเดา - Medical Futurism</title>
+  <title>กลุ่มงานการแพทย์แผนไทยฯ รพ.สะเดา</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" type="image/png">
+  <link rel="apple-touch-icon" href="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png">
   <meta name="description" content="บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness โรงพยาบาลสะเดา">
    
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,106 +15,74 @@
   <script src="https://unpkg.com/lucide@0.292.0"></script>
    
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600&display=swap');
     
     /* Global Styles */
-    body { 
-        font-family: 'Sarabun', sans-serif; 
-        background-color: #0f172a; /* Slate 900 */
-        color: #e2e8f0; /* Slate 200 */
-        overflow-x: hidden;
-    }
+    body { font-family: 'Sarabun', sans-serif; -webkit-font-smoothing: antialiased; }
     .font-prompt { font-family: 'Prompt', sans-serif; }
     
     html { 
       scroll-behavior: smooth; 
       scroll-padding-top: 100px; 
     }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #475569; }
     
-    /* Futuristic Card Shapes */
-    .clip-tech-card {
-        clip-path: polygon(
-            20px 0, 100% 0, 
-            100% calc(100% - 20px), calc(100% - 20px) 100%, 
-            0 100%, 0 20px
-        );
-    }
+    /* Custom Animations & Effects */
+    .hover-lift { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease; }
+    .hover-lift:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
     
-    .clip-shield {
-        clip-path: polygon(50% 0, 100% 15%, 100% 85%, 50% 100%, 0 85%, 0 15%);
-    }
-
-    .clip-badge {
-         clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
-    }
-
-    /* Animations */
-    @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-    .animate-float { animation: float 4s ease-in-out infinite; }
-
-    @keyframes glow { 0% { box-shadow: 0 0 5px rgba(16,185,129,0.2); } 50% { box-shadow: 0 0 20px rgba(16,185,129,0.6); } 100% { box-shadow: 0 0 5px rgba(16,185,129,0.2); } }
-    .animate-glow { animation: glow 2s infinite; }
-
-    @keyframes scanline { 0% { top: -100%; } 100% { top: 100%; } }
-    .scanline::after {
-        content: ""; position: absolute; top: -100%; left: 0; width: 100%; height: 20px;
-        background: linear-gradient(to bottom, transparent, rgba(6, 182, 212, 0.5), transparent);
-        animation: scanline 3s linear infinite; pointer-events: none;
-    }
-
-    .glass-panel {
-        background: rgba(30, 41, 59, 0.7);
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
-    .metallic-text {
-        background: linear-gradient(to bottom, #ffffff, #94a3b8);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0px 2px 4px rgba(0,0,0,0.3);
+    .btn-glow {
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      transition: all 0.3s ease;
     }
-    
-    /* Neon Borders */
-    .neon-border-blue { box-shadow: 0 0 10px #0ea5e9, inset 0 0 10px #0ea5e9; }
-    .neon-border-gold { box-shadow: 0 0 15px #eab308, inset 0 0 5px #eab308; }
-    
-    /* Video Container */
+    .btn-glow:hover {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+      transform: translateY(-2px);
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out; }
+
     .video-container {
-      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
-      border-radius: 1rem; border: 1px solid #334155;
-      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 1rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      background: #000;
     }
-    .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .video-container iframe {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+    }
   </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
 
-  <div id="status-container" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-900">
+  <div id="status-container" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white">
     <div id="loader" class="text-center">
-      <div class="w-20 h-20 border-t-4 border-b-4 border-cyan-500 rounded-full animate-spin mx-auto mb-4 shadow-[0_0_15px_#06b6d4]"></div>
-      <p class="text-cyan-400 font-prompt tracking-widest animate-pulse">SYSTEM LOADING...</p>
+      <div class="w-16 h-16 border-4 border-slate-100 border-t-emerald-500 rounded-full animate-spin mx-auto mb-4"></div>
+      <p class="text-slate-500 animate-pulse">Loading...</p>
     </div>
   </div>
 
-  <div id="root" class="opacity-0 transition-opacity duration-700"></div>
+  <div id="root" class="opacity-0 transition-opacity duration-500"></div>
 
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
 
-    // --- UTILS ---
     const smoothScrollTo = (e, id) => {
       e.preventDefault();
       const element = document.getElementById(id);
       if (element) {
-        const headerOffset = 90;
+        const headerOffset = 100;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
         window.scrollTo({ top: offsetPosition, behavior: "smooth" });
@@ -135,374 +104,627 @@
       return <i ref={iconRef} data-lucide={name} className={className}></i>;
     };
 
-    // --- DATA ---
+    const SocialButton = ({ iconName, href, colorClass, label, customIcon }) => (
+      <a href={href} target="_blank" rel="noopener noreferrer" 
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-white shadow-md transition-transform transform hover:scale-105 ${colorClass}`}>
+        {customIcon ? customIcon : <Icon name={iconName} size={20} />}
+        <span className="text-sm font-medium">{label}</span>
+      </a>
+    );
+
+    // --- DATA & TRANSLATIONS ---
     const NEW_QUEUE_LINK = "https://poppingaeiou.github.io/TTMSADAOHOS/";
-    const ELEMENT_CHECK_LINK = "https://poppingaeiou.github.io/SDH_Balance_TTM/";
     const YOUTUBE_VIDEO_ID = "_nQcj7w2pPQ";
+
+    const CONTACT_INFO = {
+      phone1: "074-379-994 ต่อ 410",
+      phone2: "084-267-1735",
+      line: "https://lin.ee/Ip6j7HP",
+      facebook: "https://www.facebook.com/ttmsadao/",
+      tiktok: "https://www.tiktok.com/@ttm_sadaohos",
+      youtube: "https://www.youtube.com/@TTM_TCM_SADAO",
+      location: {
+          th: "โรงพยาบาลสะเดา ต.สะเดา อ.สะเดา จ.สงขลา",
+          en: "Sadao Hospital, Sadao, Songkhla, Thailand"
+      }
+    };
+
+    const ASSETS = { logo: "https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" };
+    const HERO_IMAGES = [
+      "https://img5.pic.in.th/file/secure-sv1/d26f2357c0618da568d3dcf464837fda.png",
+      "https://img5.pic.in.th/file/secure-sv1/52083c99d955995f60b4a9dd8448920a.png",
+      "https://img2.pic.in.th/pic/2e56ebb3c838125fd55c9db5dcd51baf.png"
+    ];
+    const CHINESE_SLIDES = [
+      "https://img5.pic.in.th/file/secure-sv1/-01c93a87008cc3d05e.jpg",
+      "https://img2.pic.in.th/pic/-02b4ed586a4999c82b.png",
+      "https://img2.pic.in.th/pic/-030112561b55359c2a.png"
+    ];
 
     const UI_TEXT = {
         th: {
             title: "กลุ่มงานการแพทย์แผนไทยฯ",
-            subTitle: "โรงพยาบาลสะเดา - Future of Wellness",
-            menuHome: "หน้าหลัก",
-            menuTeam: "ทีมแพทย์",
+            subTitle: "โรงพยาบาลสะเดา จ.สงขลา",
+            menuHome: "หน้าแรก",
+            menuTeam: "บุคลากร",
             menuService: "บริการ",
             menuContact: "ติดต่อ",
-            checkQueue: "จองคิวออนไลน์",
-            checkElement: "ตรวจธาตุเจ้าเรือน",
-            elementDesc: "วิเคราะห์สมดุลร่างกายด้วยระบบ AI อัจฉริยะ",
-            heroTitle1: "นวัตกรรมสุขภาพ",
-            heroTitle2: "ผสานภูมิปัญญาไทย",
-            heroDesc: "สัมผัสประสบการณ์การรักษาแบบผสมผสาน ด้วยเทคโนโลยีที่ทันสมัยและทีมแพทย์ผู้เชี่ยวชาญ",
-            teamTitle: "TEAM EXPERTS",
-            teamDesc: "ทีมแพทย์และบุคลากรผู้เชี่ยวชาญ พร้อมดูแลสุขภาพของคุณ",
-            contactTitle: "CONNECT WITH US",
+            checkQueue: "ตรวจสอบคิว",
+            heroTag: "✨ ศูนย์รวมศาสตร์การแพทย์แผนไทยและจีนที่ทันสมัยที่สุดในสะเดา",
+            heroTitle1: "สุขภาพดี เริ่มต้นที่",
+            heroTitle2: "การดูแลใส่ใจ",
+            heroDesc: "ให้บริการคลินิกแพทย์แผนไทย แพทย์แผนจีน และ Wellness เพื่อสุขภาพ โดยทีมผู้เชี่ยวชาญ โรงพยาบาลสะเดา",
+            viewService: "ดูรายการบริการ",
+            introTitle: "แนะนำบริการของเรา",
+            introDesc: "ชมวิดีโอแนะนำคลินิกแพทย์แผนไทยและการแพทย์ทางเลือก",
+            teamTitle: "โครงสร้างบุคลากร",
+            teamDesc: "ทีมงานคุณภาพ พร้อมให้บริการด้วยความใส่ใจ",
+            teamAssistant: "ทีมผู้ช่วยแพทย์แผนไทย",
+            serviceTitle: "บริการของเรา",
+            serviceDesc: "เลือกดูรายการบริการ ราคา และรายละเอียดสิทธิการรักษาได้ตามหมวดหมู่",
+            catAll: "ทั้งหมด",
+            catThai: "แพทย์แผนไทย",
+            catChinese: "แพทย์แผนจีน",
+            catWellness: "Wellness",
+            knowledgeTitle: "เกร็ดความรู้แพทย์แผนจีน",
+            promoTitle: "โปรโมชั่นพิเศษ! ฝังเข็มหน้าใส",
+            promoDesc: "คอร์ส 10 ครั้ง ราคาพิเศษเพียง",
+            promoNormal: "(จากปกติ 3,000.-)",
+            contactTitle: "ติดต่อสอบถาม & จองคิว",
+            locTitle: "สถานที่ตั้ง",
+            locDesc: "ชั้น 4 ตึกอุบัติเหตุ 4 ชั้น (ตึกมรกต)",
+            timeTitle: "เวลาทำการ",
+            timeThai: "แพทย์แผนไทย",
+            timeThaiDesc: "จันทร์-ศุกร์ : 08.00-20.00 น.\nเสาร์-นักขัตฤกษ์ : 08.00-16.00 น.\n⛔ หยุดวันอาทิตย์",
+            timeChinese: "แพทย์แผนจีน",
+            timeChineseDesc: "จันทร์-ศุกร์ : 08.00-16.00 น.\n⛔ ปิดวันเสาร์-อาทิตย์-นักขัตฤกษ์",
+            canBook: "สามารถนัดจองคิวล่วงหน้าได้",
+            phoneTitle: "เบอร์โทรศัพท์",
+            motto: "\"เรามุ่งมั่นให้บริการด้วยมาตรฐาน ผสมผสานภูมิปัญญาไทยเพื่อสุขภาพของคุณ\"",
+            faqTitle: "คำถามที่พบบ่อย",
+            rights: { gold: "สิทธิบัตรทอง", civil: "สิทธิข้าราชการ", sso: "สิทธิประกันสังคม", self: "ชำระเงินเอง" },
+            claim: "เบิกได้",
+            pay: "จ่าย",
+            baht: "บาท",
+            mins: "นาที",
+            times: "ครั้ง",
+            hour: "ชั่วโมง"
         },
         en: {
             title: "TTM & TCM Department",
-            subTitle: "Sadao Hospital - Future of Wellness",
+            subTitle: "Sadao Hospital, Songkhla",
             menuHome: "Home",
-            menuTeam: "Experts",
+            menuTeam: "Team",
             menuService: "Services",
             menuContact: "Contact",
-            checkQueue: "Online Booking",
-            checkElement: "Element Check",
-            elementDesc: "Analyze your body balance with AI System",
-            heroTitle1: "Health Innovation",
-            heroTitle2: "Meets Wisdom",
-            heroDesc: "Experience integrated treatment with modern technology and expert team.",
-            teamTitle: "TEAM EXPERTS",
-            teamDesc: "Our professional team ready to take care of your health.",
-            contactTitle: "CONNECT WITH US",
+            checkQueue: "Check Queue",
+            heroTag: "✨ The Most Modern Thai & Chinese Medicine Center in Sadao",
+            heroTitle1: "Good Health Starts With",
+            heroTitle2: "Great Care",
+            heroDesc: "Providing Thai Traditional Medicine, Chinese Medicine, and Wellness services by expert team at Sadao Hospital.",
+            viewService: "View Services",
+            introTitle: "Our Introduction",
+            introDesc: "Watch video introduction of our clinic and services.",
+            teamTitle: "Our Team",
+            teamDesc: "Quality team ready to serve with care.",
+            teamAssistant: "TTM Assistant Team",
+            serviceTitle: "Our Services",
+            serviceDesc: "Browse services, prices, and reimbursement rights by category.",
+            catAll: "All",
+            catThai: "Thai Medicine",
+            catChinese: "Chinese Med",
+            catWellness: "Wellness",
+            knowledgeTitle: "TCM Knowledge",
+            promoTitle: "Special Promo! Facial Acupuncture",
+            promoDesc: "10 Sessions Course only",
+            promoNormal: "(Normal 3,000.-)",
+            contactTitle: "Contact & Booking",
+            locTitle: "Location",
+            locDesc: "4th Floor, Accident Building (Emerald Bldg)",
+            timeTitle: "Working Hours",
+            timeThai: "Thai Medicine",
+            timeThaiDesc: "Mon-Fri : 08.00-20.00\nSat-Public Holiday : 08.00-16.00\n⛔ Closed on Sunday",
+            timeChinese: "Chinese Medicine",
+            timeChineseDesc: "Mon-Fri : 08.00-16.00\n⛔ Closed Sat-Sun-Public Holiday",
+            canBook: "Advance booking available",
+            phoneTitle: "Phone Number",
+            motto: "\"We are committed to standard service, blending Thai wisdom for your health.\"",
+            faqTitle: "FAQ",
+            rights: { gold: "Gold Card (UC)", civil: "Civil Servant", sso: "Social Security", self: "Self-Pay" },
+            claim: "Claimable",
+            pay: "Pay",
+            baht: "THB",
+            mins: "Mins",
+            times: "Times",
+            hour: "Hour"
         }
     };
 
     const PERSONNEL = [
-      { id: 1, name: { th: "นพ.ชัยวุฒิ สุขสมานวงศ์", en: "Dr. Chaiwut Suksamanwong" }, role: { th: "รักษาการ ผู้อำนวยการ", en: "Acting Director" }, subRole: { th: "นายแพทย์เชี่ยวชาญ", en: "Expert Physician" }, image: "https://img2.pic.in.th/pic/.48dc015dd53d0d93.png", level: "director", color: "from-red-600 to-amber-500" },
-      { id: 2, name: { th: "พท.ศุภชัย อุไร", en: "Mr. Suphachai Ourai" }, role: { th: "หัวหน้ากลุ่มงานฯ", en: "Head of Dept" }, subRole: { th: "แพทย์แผนไทยชำนาญการ", en: "Experienced TTM Dr." }, image: "https://img5.pic.in.th/file/secure-sv1/-52d2d1ee6993cded.png", level: "head", color: "from-blue-600 to-cyan-400" },
-      { id: 3, name: { th: "พท.ทศพร คงสุขนิรันดร์", en: "Mr. Thodsaporn K.", role: { th: "แพทย์แผนไทย", en: "TTM Doctor" } }, role: { th: "แพทย์แผนไทย", en: "TTM Doctor" }, image: "https://img2.pic.in.th/pic/-98ea2b365e59a684.png", level: "doctor", color: "from-emerald-600 to-teal-400" },
-      { id: 4, name: { th: "พจ.พรเพชร เพชรคงแก้ว", en: "Ms. Pornpetch P." }, role: { th: "แพทย์แผนจีน", en: "TCM Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/4e29260f0e0efb8981752c8f387e165e.png", level: "doctor", color: "from-purple-600 to-pink-400" },
-      { id: 15, name: { th: "พท.พนิตตา กีรติธราธร", en: "Ms. Panitta K." }, role: { th: "แพทย์แผนไทย", en: "TTM Doctor" }, image: "https://img2.pic.in.th/8721ae3ccb0abdb00619aa18dfdfc307.png", level: "doctor", color: "from-emerald-600 to-teal-400" },
-      // Support Staff (Sample for layout)
-      { id: 7, name: { th: "คุณอทิตย์ติญา แดงนุ้ย", en: "Ms. Atittiya D." }, role: { th: "ผช.แพทย์แผนจีน", en: "TCM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/-eb41ee4792de0bb6.png", level: "support", color: "from-slate-500 to-slate-400" },
-      { id: 8, name: { th: "คุณรจนา จันเงิน", en: "Mrs. Rotjana C." }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/pic/-b38b682db8ac596b.png", level: "support", color: "from-slate-500 to-slate-400" },
-       // ... (Add more staff as needed)
+      { id: 1, name: { th: "นพ.ชัยวุฒิ สุขสมานวงศ์", en: "Dr. Chaiwut Suksamanwong" }, nickname: "", role: { th: "รักษาการในตำแหน่ง ผู้อำนวยการโรงพยาบาลสะเดา", en: "Acting Director of Sadao Hospital" }, subRole: { th: "นายแพทย์เชี่ยวชาญ (ด้านเวชกรรมป้องกัน)", en: "Expert Physician (Preventive Medicine)" }, image: "https://img2.pic.in.th/.75218bf22f377224.png", level: "director" },
+      { id: 2, name: { th: "พท.ศุภชัย อุไร", en: "Mr. Suphachai Ourai" }, nickname: { th: "ชาย", en: "Child" }, role: { th: "หัวหน้ากลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก", en: "Head of TTM & TCM Department" }, subRole: { th: "แพทย์แผนไทยชำนาญการ", en: "Experienced Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/c1864a8536f0da1b285e145ed41050a5.png", level: "head" },
+      { id: 3, name: { th: "พท.ทศพร คงสุขนิรันดร์", en: "Mr. Thodsaporn Kongsookniran" }, nickname: { th: "ปิง", en: "Ping" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/1b279ccd79f91eea28676a2716928877.png", level: "doctor" },
+      { id: 4, name: { th: "พจ.พรเพชร เพชรคงแก้ว", en: "Ms. Pornpetch Petchkonggaew" }, nickname: { th: "บิ๋ม", en: "Bim" }, role: { th: "แพทย์แผนจีน", en: "Chinese Medicine Doctor" }, image: "https://img5.pic.in.th/file/secure-sv1/4e29260f0e0efb8981752c8f387e165e.png", level: "doctor" },
+      { id: 15, name: { th: "พท.พนิตตา กีรติธราธร", en: "Ms. Panitta Kilatitaratron" }, nickname: { th: "นุ่น", en: "Nun" }, role: { th: "แพทย์แผนไทย", en: "Thai Traditional Doctor" }, image: "https://img2.pic.in.th/8721ae3ccb0abdb00619aa18dfdfc307.png", level: "doctor" },
+      { id: 5, name: { th: "คุณจินดา จันทร์หอม", en: "Ms. Jinda Janhom" }, nickname: { th: "เจี๊ยบ", en: "Jeab" }, role: { th: "พนักงานช่วยเหลือคนไข้", en: "Nurse Aide" }, image: "https://img2.pic.in.th/ea9cd8060f1a4674eb032026ba66397b.png", level: "support" },
+      { id: 6, name: { th: "คุณเจนจิรา หมอราช", en: "Mrs. Janejira Morrat" }, nickname: { th: "เจน", en: "Jane" }, role: { th: "พนักงานบริการ", en: "Service Staff" }, image: "https://img5.pic.in.th/file/secure-sv1/feda276cef9020a84b7d90b55cf878bb.png", level: "support" },
+      { id: 7, name: { th: "คุณอทิตย์ติญา แดงนุ้ย", en: "Ms. Atittiya Dangnui " }, nickname: { th: "ฟา", en: "Fa" }, role: { th: "ผช.แพทย์แผนจีน", en: "TCM Assistant" }, image: "https://img2.pic.in.th/e44018508f77341c3a3104d7138f02ee.png", level: "support" },
+      { id: 8, name: { th: "คุณรจนา จันเงิน", en: "Mrs. Rotjana Channgoen" }, nickname: { th: "แหม่ม", en: "Maam" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/0828c95359229ff084c17c2b44a978dd.png", level: "assistant_thai" },
+      { id: 9, name: { th: "คุณอรรถพล อั้นซ้าย", en: "Mr. Attapon Ansai" }, nickname: { th: "บ่าว", en: "Bao" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/dd8c597bf4c72fb33954291ce82ba70f.png", level: "assistant_thai" },
+      { id: 10, name: { th: "คุณศินารัตน์ แซ่ตั้ง", en: "Ms. Sinarat Saetang" }, nickname: { th: "ซี", en: "C" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/4bbe198f1a10b5ba6b9c5e2169b33cf6.png", level: "assistant_thai" },
+      { id: 11, name: { th: "คุณจุฑามาศ เว้นบาป", en: "Ms. Jutamat Wenbap" }, nickname: { th: "ฝน", en: "Fon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/2977764348cf43652c892a78830e688a.png", level: "assistant_thai" },
+      { id: 12, name: { th: "คุณรัตน์ชนก พูลคุ้ม", en: "Ms. Ratchanok Poolkhum" }, nickname: { th: "กวาง", en: "Kwang" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img2.pic.in.th/5105a7c4b12e851de431b532ea9ffe1c.png", level: "assistant_thai" },
+      { id: 13, name: { th: "คุณนิกษ์นิภา คงสุวรรณ์", en: "Ms. Niknipha Khongsuwan" }, nickname: { th: "การ์ตูน", en: "Kartoon" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/6473f3ad93a1fdd8480e0cb2c2d76a5a.png", level: "assistant_thai" },
+      { id: 14, name: { th: "คุณณิชาภัทร ทองบริบูรณ์", en: "Ms. Nichapat Thongboriboon" }, nickname: { th: "วาวา", en: "Wawa" }, role: { th: "ผช.แพทย์แผนไทย", en: "TTM Assistant" }, image: "https://img5.pic.in.th/file/secure-sv1/f13809d649f219e20d375b5a271ff9f8.png", level: "assistant_thai" }
     ];
 
     const SERVICES = [
-       { id: 1, name: {th: "ฝังเข็มรักษา", en: "Acupuncture"}, icon: "zap", color: "text-amber-400" },
-       { id: 2, name: {th: "นวดรักษา", en: "Massage"}, icon: "activity", color: "text-emerald-400" },
-       { id: 3, name: {th: "ครอบแก้ว", en: "Cupping"}, icon: "circle", color: "text-red-400" },
-       { id: 4, name: {th: "สปาผิว", en: "Skin Spa"}, icon: "sparkles", color: "text-cyan-400" },
+      { id: 7, category: "thai", name: { th: "นวดรักษา & ประคบสมุนไพร", en: "Therapeutic Massage & Compress" }, image: "https://img5.pic.in.th/file/secure-sv1/03fccfc168e76dc911661d943b51982f.png", duration: 60, prices: { gold: {th:"เบิกได้ (จ่าย 30.-)", en:"Claimable (Pay 30.-)"}, direct: "claim", sso: "250", self: "250" }, tag: {th:"แนะนำ", en:"Recommend"} },
+      { id: 8, category: "thai", name: { th: "นวดเท้าเพื่อการรักษา", en: "Therapeutic Foot Massage" }, image: "https://img5.pic.in.th/file/secure-sv1/f6ec2a3d78b18f2ecaeeb9418e4f2325.png", duration: 60, prices: { gold: {th:"เบิกได้ (จ่าย 30.-)", en:"Claimable (Pay 30.-)"}, direct: "claim", sso: "200", self: "200" } },
+      { id: 9, category: "thai", name: { th: "นวดเพื่อส่งเสริมสุขภาพ", en: "Health Massage" }, image: "https://img2.pic.in.th/pic/37354cf8d9be1211f7c39b39d90c8e2a.png", duration: 60, prices: { gold: "200", direct: "200", sso: "200", self: "200" }, note: {th:"เพิ่มประคบ +50 บาท", en:"Add Herbal Compress +50 THB"} },
+      { id: 10, category: "thai", name: { th: "ฟื้นฟูมารดาหลังคลอด", en: "Postpartum Care" }, image: "https://img5.pic.in.th/file/secure-sv1/488d0b342753fa04d362754c545564ba.md.png", duration: 120, prices: { gold: "claim", direct: "claim", sso: "500", self: "500" }, description: {th:"ทับหม้อเกลือ / นวดเปิดท่อน้ำนม / อบไอน้ำ / ประคบสมุนไพร", en:"Salt Pot Compress / Lactation Massage / Herbal Steam"} },
+      { id: 11, category: "thai", name: { th: "อบไอน้ำสมุนไพร", en: "Herbal Steam" }, image: "https://img2.pic.in.th/pic/1f868c26dc34ba16f9cc15face9d4f05.png", duration: 0, prices: { gold: "claim", direct: "claim", sso: "100", self: "100" } },
+      { id: 1, category: "chinese", name: { th: "ฝังเข็มเพื่อการรักษา", en: "Acupuncture Treatment" }, image: "https://img2.pic.in.th/pic/d359ac8696da066c76f48132a87602b3.png", duration: 30, prices: { gold: {th:"150.- / IMC เบิกได้", en:"150.- / IMC Claimable"}, direct: "claim", sso: "150", self: "150" }, tag: {th:"ยอดนิยม", en:"Popular"} },
+      { id: 2, category: "chinese", name: { th: "ฝังเข็มและกระตุ้นไฟฟ้า", en: "Electro-Acupuncture" }, image: "https://img2.pic.in.th/pic/dd618c225015104b285923e990f471c0.png", duration: 30, prices: { gold: {th:"200.- / IMC เบิกได้", en:"200.- / IMC Claimable"}, direct: "claim", sso: "200", self: "200" } },
+      { id: 3, category: "chinese", name: { th: "ครอบแก้ว (Cupping)", en: "Cupping Therapy" }, image: "https://img5.pic.in.th/file/secure-sv1/a25117101f783602ca6b40e248a8574c.png", duration: 30, prices: { gold: "150", direct: "150", sso: "150", self: "150" } },
+      { id: 4, category: "chinese", name: { th: "กัวซา (Gua Sha)", en: "Gua Sha" }, image: "https://img5.pic.in.th/file/secure-sv1/367f1932e1a97cc92612949636a3b680.png", duration: 30, prices: { gold: "150", direct: "150", sso: "150", self: "150" } },
+      { id: 5, category: "chinese", name: { th: "เม็ดผักกาดแปะหู", en: "Ear Seeds" }, image: "https://img2.pic.in.th/pic/bff4bf80b2bd8007ea40e202456abc94.png", duration: 10, prices: { gold: "100", direct: "100", sso: "100", self: "100" } },
+      { id: 6, category: "chinese", name: { th: "ฝังเข็มใบหน้า (Face)", en: "Facial Acupuncture" }, image: "https://img2.pic.in.th/pic/04e672176850709bddd0a9ecc3882781.png", duration: 30, specialPrice: [{ label: {th:"1 ครั้ง", en:"1 Session"}, price: "300.-" }, { label: {th:"10 ครั้ง", en:"10 Sessions"}, price: "2,600.-" }], note: {th:"ชำระเงินเองเท่านั้น", en:"Self-pay only"} },
+      { id: 12, category: "wellness", name: { th: "สครับเกลือ (Salt Scrub)", en: "Salt Scrub" }, image: "https://img2.pic.in.th/pic/127136b6f8d90a6663cde69408e3ad78.png", duration: 60, singlePrice: "500.-", description: {th:"ผลัดเซลล์ผิว ลดการอุดตัน ผิวเนียนใส", en:"Exfoliate skin, reduce clogging, smooth skin"}, workingHours: {th:"จันทร์-ศุกร์ 08.00-16.00 น.", en:"Mon-Fri 08.00-16.00"} },
+      { id: 13, category: "wellness", name: { th: "สปาผิว & ผลัดเซลล์ผิว", en: "Skin Spa" }, image: "https://img5.pic.in.th/file/secure-sv1/2c481a861621360399d9fa5ae5e4522e.png", duration: "varies", specialPrice: [{ label: {th:"1 ชั่วโมง", en:"1 Hour"}, price: "650.-" }, { label: {th:"2 ชั่วโมง", en:"2 Hours"}, price: "1,000.-" }], description: {th:"เร่งผิวขาวใส นุ่มชุ่มชื้น สีผิวสม่ำเสมอ", en:"Brighten skin, moisturize, even skin tone"}, workingHours: {th:"จันทร์-ศุกร์ 08.00-16.00 น.", en:"Mon-Fri 08.00-16.00"} },
+      { id: 14, category: "wellness", name: { th: "นวดน้ำมันอโรม่า", en: "Aroma Massage" }, image: "https://img2.pic.in.th/pic/a46c58eb896922c1471faade2da50f83.png", duration: 60, singlePrice: "550.-", description: {th:"ผ่อนคลายกล้ามเนื้อด้วยน้ำมันหอมระเหย", en:"Relax muscles with essential oils"}, tag: {th:"ใหม่", en:"New"} }
     ];
 
-    // --- COMPONENTS ---
+    const FAQS = [
+        { q: {th:"ไปรับบริการต้องเตรียมเอกสารอะไรบ้าง?", en:"What documents are required?"}, a: {th:"เพียงนำบัตรประชาชนใบเดียวมาที่ชั้น 4 ตึกอุบัติเหตุ (ตึกมรกต) ครับ", en:"Just bring your ID card to the 4th floor, Accident Building (Emerald Bldg)."} },
+        { q: {th:"การนวดช่วยเรื่องอะไรบ้าง?", en:"What are the benefits of massage?"}, a: {th:"การนวดช่วย คลายกล้ามเนื้อ เพิ่มการไหลเวียนของเลือด แนะนำเพิ่มการประคบร้อน เพื่อป้องกันการอักเสบเรื้อรังได้ ครับ", en:"Massage helps relax muscles and improve blood circulation. Herbal compress is recommended to prevent chronic inflammation."} },
+        { q: {th:"ฝังเข็มเจ็บไหม?", en:"Is acupuncture painful?"}, a: {th:"การฝังเข็มอาจมีความรู้สึกจี๊ดๆ หรือหน่วงๆ เล็กน้อย แต่ไม่เจ็บเหมือนการฉีดยาครับ ผู้ป่วยส่วนใหญ่สามารถทนได้และรู้สึกผ่อนคลายขณะรักษา", en:"You might feel a slight sensation, but it's not painful like an injection. Most patients find it relaxing."} },
+        { q: {th:"ต้องจองคิวล่วงหน้าหรือไม่?", en:"Is advance booking required?"}, a: {th:"แนะนำให้จองคิวล่วงหน้าผ่านระบบออนไลน์หรือ LINE เพื่อความสะดวกรวดเร็วครับ แต่หากมาติดต่อเลยโดยไม่ได้นัดหมาย ก็สามารถเข้ามารับบริการได้แต่อาจต้องรอคิวว่างครับ", en:"Advance booking via Online/LINE is recommended. Walk-ins are welcome but may have to wait for available slots."} },
+        { q: {th:"ฝังเข็มช่วยอะไร?", en:"What does acupuncture treat?"}, a: {th:"ช่วยปรับสมดุลร่างกาย กระตุ้นจุดลมปราณ (ชี่) และเลือดให้ไหลเวียนดีขึ้น ระบายความร้อนหรือสารพิษ และฟื้นฟูร่างกาย", en:"It balances the body, stimulates Qi and blood circulation, releases heat/toxins, and restores body balance."} }
+    ];
 
-    const Navbar = ({ lang, toggleLang, isMenuOpen, setIsMenuOpen }) => (
-      <nav className="fixed top-0 w-full z-50 glass-panel border-b border-slate-700/50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-                <div className="absolute inset-0 bg-cyan-500 blur opacity-50 rounded-full"></div>
-                <img src="https://img2.pic.in.th/pic/34b5ae8042fd52c90e27479e9fb56d8e.md.png" className="h-10 w-auto relative z-10" alt="Logo" />
-            </div>
-            <div>
-              <h1 className="text-base md:text-lg font-bold font-prompt text-white tracking-wide">{UI_TEXT[lang].title}</h1>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center gap-6">
-            {["home", "team", "services", "contact"].map(menu => (
-                <a key={menu} href={`#${menu}`} onClick={(e) => smoothScrollTo(e, menu)} className="text-slate-300 hover:text-cyan-400 text-sm font-medium transition-colors uppercase tracking-wider">
-                    {UI_TEXT[lang][`menu${menu.charAt(0).toUpperCase() + menu.slice(1)}`]}
-                </a>
-            ))}
-            <button onClick={toggleLang} className="px-3 py-1 border border-slate-600 rounded text-xs text-slate-400 hover:border-cyan-400 hover:text-cyan-400 transition-all">
-                {lang === 'th' ? 'EN' : 'TH'}
-            </button>
-            <a href={NEW_QUEUE_LINK} target="_blank" className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white px-5 py-2 rounded clip-badge text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all transform hover:scale-105">
-                {UI_TEXT[lang].checkQueue}
-            </a>
-          </div>
-
-           <button className="md:hidden text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-             <Icon name={isMenuOpen ? "x" : "menu"} />
-           </button>
-        </div>
-        
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-slate-900 border-t border-slate-800 absolute w-full p-4 flex flex-col gap-4 animate-fade-in">
-             {["home", "team", "services", "contact"].map(menu => (
-                <a key={menu} href={`#${menu}`} onClick={(e) => {smoothScrollTo(e, menu); setIsMenuOpen(false);}} className="text-slate-300 py-2 border-b border-slate-800">
-                    {UI_TEXT[lang][`menu${menu.charAt(0).toUpperCase() + menu.slice(1)}`]}
-                </a>
-            ))}
-             <a href={NEW_QUEUE_LINK} target="_blank" className="bg-cyan-600 text-center py-3 rounded text-white font-bold">{UI_TEXT[lang].checkQueue}</a>
-          </div>
-        )}
-      </nav>
-    );
-
-    const Hero = ({ lang }) => (
-        <section id="home" className="relative min-h-[90vh] flex items-center pt-20 overflow-hidden bg-slate-900">
-            {/* Background Grid & Light */}
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-transparent to-slate-900 z-10"></div>
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] animate-pulse"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-600/10 rounded-full blur-[100px]"></div>
-
-            <div className="container mx-auto px-4 relative z-20 flex flex-col md:flex-row items-center gap-12">
-                <div className="w-full md:w-1/2 space-y-6">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-950/30 text-cyan-400 text-xs font-bold tracking-widest uppercase mb-4">
-                        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-blink"></span> Medical Innovation 2026
-                    </div>
-                    <h1 className="text-5xl md:text-7xl font-bold font-prompt leading-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
-                        {UI_TEXT[lang].heroTitle1} <br/>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
-                            {UI_TEXT[lang].heroTitle2}
-                        </span>
-                    </h1>
-                    <p className="text-slate-400 text-lg max-w-lg leading-relaxed border-l-4 border-cyan-500 pl-4">
-                        {UI_TEXT[lang].heroDesc}
-                    </p>
-                    <div className="flex flex-wrap gap-4 pt-4">
-                        <a href="#services" onClick={(e) => smoothScrollTo(e, 'services')} className="group relative px-8 py-3 bg-white text-slate-900 font-bold clip-badge hover:bg-cyan-50 transition-all flex items-center gap-2">
-                            Explore Services <Icon name="arrow-right" size={18} className="group-hover:translate-x-1 transition-transform"/>
-                        </a>
-                        <div className="flex items-center gap-4 text-slate-500 text-sm">
-                           <Icon name="shield-check" className="text-emerald-500" /> Professional Certified
-                        </div>
-                    </div>
-                </div>
-                
-                {/* 3D Hero Image Layering */}
-                <div className="w-full md:w-1/2 relative h-[400px] md:h-[600px] flex items-center justify-center perspective-1000">
-                     <div className="absolute w-[300px] h-[300px] border border-cyan-500/30 rounded-full animate-[spin_10s_linear_infinite]"></div>
-                     <div className="absolute w-[350px] h-[350px] border border-dashed border-white/10 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
-                     <img src="https://img5.pic.in.th/file/secure-sv1/d26f2357c0618da568d3dcf464837fda.png" className="relative z-10 w-full h-full object-contain drop-shadow-[0_0_50px_rgba(0,0,0,0.8)] mask-image-gradient" alt="Hero" />
-                </div>
-            </div>
-        </section>
-    );
-
-    const ElementCheckSection = ({ lang }) => (
-        <section className="relative py-12 -mt-10 z-30 container mx-auto px-4">
-            <div className="glass-panel rounded-2xl p-1 overflow-hidden group">
-                <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-8 md:p-12 relative overflow-hidden rounded-xl flex flex-col md:flex-row items-center justify-between gap-8">
-                    {/* Animated Background */}
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-amber-500 via-purple-500 to-transparent"></div>
-                    <div className="absolute -right-20 -top-20 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-all duration-700"></div>
-
-                    <div className="relative z-10 text-center md:text-left">
-                         <div className="inline-block px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold rounded mb-3 shadow-lg shadow-amber-500/20">NEW FEATURE</div>
-                         <h2 className="text-3xl md:text-4xl font-bold font-prompt text-white mb-2">{UI_TEXT[lang].checkElement}</h2>
-                         <p className="text-slate-400 mb-6">{UI_TEXT[lang].elementDesc}</p>
-                         
-                         <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                             <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-800/50 px-3 py-2 rounded border border-slate-700">
-                                 <span className="w-2 h-2 bg-red-500 rounded-full"></span> Fire
-                             </div>
-                             <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-800/50 px-3 py-2 rounded border border-slate-700">
-                                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span> Water
-                             </div>
-                             <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-800/50 px-3 py-2 rounded border border-slate-700">
-                                 <span className="w-2 h-2 bg-emerald-500 rounded-full"></span> Earth
-                             </div>
-                             <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-800/50 px-3 py-2 rounded border border-slate-700">
-                                 <span className="w-2 h-2 bg-slate-200 rounded-full"></span> Wind
-                             </div>
-                         </div>
-                    </div>
-
-                    <div className="relative z-10">
-                        <a href={ELEMENT_CHECK_LINK} target="_blank" className="relative group/btn inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-transparent border-2 border-white rounded-lg focus:outline-none hover:bg-white hover:text-black hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
-                            <span className="mr-2 text-lg">START ANALYSIS</span>
-                            <Icon name="scan-face" size={24} />
-                            <div className="absolute inset-0 w-full h-full border-2 border-white rounded-lg blur opacity-40 group-hover/btn:opacity-100 transition-opacity"></div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-
-    const PersonnelCard = ({ person, lang }) => {
-        // Dynamic styling based on level
-        const glowColor = person.level === 'director' ? 'shadow-red-500/50 border-red-500/50' :
-                          person.level === 'head' ? 'shadow-blue-500/50 border-blue-500/50' :
-                          person.level === 'doctor' ? 'shadow-emerald-500/50 border-emerald-500/50' :
-                          'shadow-slate-500/50 border-slate-500/50';
-        
-        const bgGradient = person.color; 
-
-        return (
-            <div className="group relative w-full max-w-[280px] mx-auto transition-transform duration-500 hover:-translate-y-2">
-                {/* Background Glow */}
-                <div className={`absolute inset-0 bg-gradient-to-b ${bgGradient} opacity-0 group-hover:opacity-30 blur-2xl transition-opacity duration-500 rounded-full`}></div>
-                
-                {/* Card Shape */}
-                <div className="relative clip-badge bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 p-[2px]">
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent opacity-50"></div>
-                    
-                    {/* Inner Content */}
-                    <div className="bg-slate-900 clip-badge h-[380px] relative overflow-hidden flex flex-col">
-                        
-                        {/* Background Light Beam behind person */}
-                        <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b ${bgGradient} opacity-20 group-hover:opacity-40 transition-opacity`}></div>
-                        
-                        {/* Image */}
-                        <div className="relative h-[260px] w-full mt-4 overflow-hidden z-10">
-                             <img src={person.image} alt={person.name[lang]} className="w-full h-full object-cover object-top scale-110 group-hover:scale-125 transition-transform duration-700 drop-shadow-2xl" loading="lazy" />
-                        </div>
-
-                        {/* Text Content Area */}
-                        <div className="absolute bottom-0 w-full h-[120px] bg-gradient-to-t from-black via-slate-900/90 to-transparent z-20 flex flex-col justify-end pb-4 px-4 text-center">
-                             <div className="w-10 h-1 bg-gradient-to-r ${bgGradient} mx-auto mb-2 rounded-full"></div>
-                             <h3 className="text-lg font-bold text-white font-prompt leading-tight group-hover:text-cyan-400 transition-colors">
-                                 {person.name[lang]}
-                             </h3>
-                             <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-wider">{person.role[lang]}</p>
-                             {person.subRole && <p className="text-[10px] text-slate-500">{person.subRole[lang]}</p>}
-                        </div>
-                        
-                        {/* High-tech overlay lines */}
-                        <div className="absolute top-4 right-4 w-2 h-2 bg-white/50 rounded-full"></div>
-                        <div className="absolute bottom-4 left-4 flex gap-1">
-                            <div className="w-1 h-1 bg-slate-500 rounded-full"></div>
-                            <div className="w-1 h-1 bg-slate-500 rounded-full"></div>
-                            <div className="w-1 h-1 bg-slate-500 rounded-full"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+    const LEVEL_STYLES = {
+      director: { header: "bg-gradient-to-r from-amber-400 to-yellow-500", text: "text-amber-900", border: "border-amber-300/50", shadow: "hover:shadow-amber-200/50", accent: "from-amber-500 to-yellow-400" },
+      head: { header: "bg-gradient-to-r from-blue-500 to-cyan-500", text: "text-blue-900", border: "border-blue-300/50", shadow: "hover:shadow-blue-200/50", accent: "from-blue-500 to-cyan-400" },
+      doctor: { header: "bg-gradient-to-r from-emerald-500 to-teal-500", text: "text-emerald-900", border: "border-emerald-300/50", shadow: "hover:shadow-emerald-200/50", accent: "from-emerald-500 to-teal-400" },
+      support: { header: "bg-gradient-to-r from-rose-400 to-pink-500", text: "text-rose-900", border: "border-rose-300/50", shadow: "hover:shadow-rose-200/50", accent: "from-rose-400 to-pink-500" },
+      assistant_thai: { header: "bg-gradient-to-r from-rose-400 to-pink-500", text: "text-rose-900", border: "border-rose-300/50", shadow: "hover:shadow-rose-200/50", accent: "from-rose-400 to-pink-500" } 
     };
 
-    const TeamSection = ({ lang }) => (
-        <section id="team" className="py-20 relative overflow-hidden">
-             <div className="absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
-             
-             <div className="container mx-auto px-4 relative z-10">
-                 <div className="text-center mb-16">
-                     <span className="text-cyan-500 font-bold tracking-[0.3em] text-sm uppercase mb-2 block animate-pulse">Our Guardians</span>
-                     <h2 className="text-4xl md:text-5xl font-bold font-prompt text-white metallic-text">{UI_TEXT[lang].teamTitle}</h2>
-                     <p className="text-slate-400 mt-4 max-w-2xl mx-auto">{UI_TEXT[lang].teamDesc}</p>
-                 </div>
+    const CATEGORY_THEMES = {
+      thai: { color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-200", hoverBorder: "group-hover:border-emerald-500", badge: "bg-emerald-600", btnActive: "bg-emerald-600 text-white shadow-emerald-200", icon: "leaf" },
+      chinese: { color: "text-red-700", bg: "bg-red-50", border: "border-red-200", hoverBorder: "group-hover:border-red-500", badge: "bg-gradient-to-r from-red-600 to-amber-500", btnActive: "bg-gradient-to-r from-red-700 to-red-600 text-white shadow-red-200", icon: "zap" },
+      wellness: { color: "text-cyan-700", bg: "bg-cyan-50", border: "border-cyan-200", hoverBorder: "group-hover:border-cyan-500", badge: "bg-cyan-600", btnActive: "bg-cyan-600 text-white shadow-cyan-200", icon: "droplets" },
+      all: { btnActive: "bg-slate-800 text-white shadow-slate-300" }
+    };
 
-                 <div className="flex flex-col items-center gap-12">
-                     {/* Director */}
-                     <div className="w-full flex justify-center perspective-1000">
-                         {PERSONNEL.filter(p => p.level === 'director').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}
-                     </div>
-                     
-                     {/* Head */}
-                     <div className="w-full flex justify-center">
-                         {PERSONNEL.filter(p => p.level === 'head').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}
-                     </div>
+    // --- Sub-Components ---
 
-                     {/* Doctors Grid */}
-                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8 justify-center items-center">
-                         {PERSONNEL.filter(p => p.level === 'doctor').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}
-                     </div>
-                     
-                     {/* Divider */}
-                     <div className="w-32 h-1 bg-slate-800 rounded-full mx-auto"></div>
+    const HeroSlider = ({lang}) => {
+      const [index, setIndex] = useState(0);
+      useEffect(() => {
+        const timer = setInterval(() => setIndex((prev) => (prev + 1) % HERO_IMAGES.length), 5000);
+        return () => clearInterval(timer);
+      }, []);
 
-                     {/* Support Staff (Compact Grid) */}
-                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                         {PERSONNEL.filter(p => p.level === 'support').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}
-                     </div>
-                 </div>
-             </div>
-        </section>
-    );
-
-    const VideoSection = ({ lang }) => (
-        <section className="py-16 bg-slate-900 border-t border-slate-800">
-            <div className="container mx-auto px-4">
-                 <div className="flex flex-col md:flex-row gap-12 items-center">
-                     <div className="w-full md:w-1/2">
-                         <h3 className="text-3xl font-bold text-white mb-6 border-l-4 border-cyan-500 pl-4">
-                             {lang === 'th' ? 'แนะนำบริการของเรา' : 'Our Introduction'}
-                         </h3>
-                         <p className="text-slate-400 mb-6 leading-relaxed">
-                            {lang === 'th' 
-                             ? 'เยี่ยมชมคลินิกและทำความรู้จักกับศาสตร์การรักษาของเราผ่านวิดีโอแนะนำ' 
-                             : 'Take a tour of our clinic and learn more about our treatments through this introduction video.'}
-                         </p>
-                         <div className="grid grid-cols-2 gap-4">
-                             {SERVICES.map(s => (
-                                 <div key={s.id} className="bg-slate-800/50 p-4 rounded border border-slate-700 flex items-center gap-3">
-                                     <Icon name={s.icon} className={s.color} />
-                                     <span className="text-slate-300 font-medium text-sm">{s.name[lang]}</span>
-                                 </div>
-                             ))}
-                         </div>
-                     </div>
-                     <div className="w-full md:w-1/2">
-                         <div className="video-container ring-4 ring-slate-800 ring-offset-2 ring-offset-cyan-500/50">
-                             <iframe src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}`} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                         </div>
-                     </div>
-                 </div>
+      return (
+        <section id="home" className="relative h-[500px] lg:h-[600px] overflow-hidden bg-slate-900">
+          {HERO_IMAGES.map((img, i) => (
+            <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === index ? 'opacity-100' : 'opacity-0'}`}>
+              <img src={img} alt="Hero" className="w-full h-full object-cover opacity-60" loading={i===0 ? "eager" : "lazy"} />
             </div>
-        </section>
-    );
-
-    const ContactSection = ({ lang }) => (
-        <section id="contact" className="py-20 bg-black relative">
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <div className="container mx-auto px-4 relative z-10 text-center">
-                 <h2 className="text-3xl font-bold text-white mb-8 tracking-widest uppercase">{UI_TEXT[lang].contactTitle}</h2>
-                 
-                 <div className="flex flex-wrap justify-center gap-6">
-                     <a href="https://www.facebook.com/ttmsadao/" target="_blank" className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-blue-500 hover:bg-blue-600 hover:text-white hover:scale-110 transition-all shadow-lg border border-slate-700">
-                         <Icon name="facebook" size={32} />
-                     </a>
-                     <a href="https://lin.ee/Ip6j7HP" target="_blank" className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-green-500 hover:bg-green-600 hover:text-white hover:scale-110 transition-all shadow-lg border border-slate-700">
-                         <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" className="w-8 h-8" />
-                     </a>
-                     <a href="tel:074379994" className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center text-cyan-500 hover:bg-cyan-600 hover:text-white hover:scale-110 transition-all shadow-lg border border-slate-700">
-                         <Icon name="phone" size={32} />
-                     </a>
-                 </div>
-                 
-                 <div className="mt-12 p-8 bg-slate-900/50 inline-block rounded-xl border border-slate-800 backdrop-blur">
-                     <p className="text-slate-400">Sadao Hospital, Songkhla, Thailand</p>
-                     <p className="text-slate-500 text-sm mt-2">© 2026 TTM & TCM Department. All rights reserved.</p>
-                 </div>
+          ))}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-slate-900/50"></div>
+           
+          <div className="absolute inset-0 flex items-center justify-center text-center px-4 z-10">
+            <div className="max-w-3xl animate-fade-in">
+              <span className="inline-block py-1 px-4 rounded-full bg-white/20 backdrop-blur-md text-cyan-200 text-sm mb-4 border border-white/20">
+                {UI_TEXT[lang].heroTag}
+              </span>
+              <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
+                {UI_TEXT[lang].heroTitle1}<br/><span className="text-cyan-400">{UI_TEXT[lang].heroTitle2}</span>
+              </h2>
+              <p className="text-lg md:text-xl text-slate-200 mb-8 font-light">
+                {UI_TEXT[lang].heroDesc}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#services" onClick={(e) => smoothScrollTo(e, 'services')} className="bg-white text-cyan-800 px-8 py-4 rounded-full font-bold shadow-lg hover:bg-cyan-50 transition-transform hover:scale-105 flex items-center justify-center gap-2 relative z-20 cursor-pointer">
+                   {UI_TEXT[lang].viewService} <Icon name="chevron-right" size={20} />
+                </a>
+                <a href={NEW_QUEUE_LINK} target="_blank" className="btn-glow bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-8 py-4 rounded-full font-bold transition-all hover:scale-105 flex items-center justify-center gap-2 ring-4 ring-emerald-500/30 relative z-20">
+                  <Icon name="calendar-check" size={20} /> {UI_TEXT[lang].checkQueue}
+                </a>
+              </div>
             </div>
+          </div>
         </section>
+      );
+    };
+
+    const VideoIntroduction = ({lang}) => {
+      return (
+        <section className="py-16 bg-white border-b border-slate-100">
+          <div className="container mx-auto px-4">
+              <div className="text-center mb-10">
+                <h3 className="text-3xl font-bold text-slate-800 mb-2">{UI_TEXT[lang].introTitle}</h3>
+                <p className="text-slate-500">{UI_TEXT[lang].introDesc}</p>
+              </div>
+            <div className="max-w-4xl mx-auto">
+              <div className="video-container">
+                <iframe 
+                  src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1&mute=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}`} 
+                  title="YouTube video player" 
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  allowFullScreen>
+                </iframe>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    };
+
+    const InfoSlider = () => {
+      const [index, setIndex] = useState(0);
+      useEffect(() => {
+        const timer = setInterval(() => setIndex((prev) => (prev + 1) % CHINESE_SLIDES.length), 4000);
+        return () => clearInterval(timer);
+      }, []);
+      return (
+        <div className="relative w-full max-w-4xl mx-auto h-64 md:h-96 rounded-2xl overflow-hidden shadow-xl border-4 border-amber-100 mt-8 group bg-white">
+          {CHINESE_SLIDES.map((img, i) => (
+            <div key={i} className={`absolute inset-0 transition-opacity duration-1000 ${i === index ? 'opacity-100' : 'opacity-0'}`}>
+              <img src={img} alt="Info" className="w-full h-full object-contain" loading="lazy" />
+            </div>
+          ))}
+          <div className="absolute bottom-4 left-0 w-full flex justify-center gap-2">
+            {CHINESE_SLIDES.map((_, i) => (
+              <button key={i} onClick={() => setIndex(i)} className={`w-2 h-2 rounded-full transition-all ${i === index ? 'bg-amber-500 w-6' : 'bg-slate-300'}`}></button>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    const FloatingContact = () => (
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-3 animate-fade-in">
+        <a href={`tel:${CONTACT_INFO.phone2.replace(/-/g, '')}`} className="bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-lg shadow-emerald-200 transition-transform hover:scale-110 flex items-center justify-center">
+          <Icon name="phone" size={24} />
+        </a>
+        <a href={CONTACT_INFO.line} target="_blank" className="bg-[#00C300] hover:bg-green-600 text-white p-3.5 rounded-full shadow-lg shadow-green-200 transition-transform hover:scale-110 flex items-center justify-center">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" className="w-6 h-6 bg-white rounded p-0.5" />
+        </a>
+      </div>
     );
 
-    // --- MAIN APP ---
+    const FAQSection = ({lang}) => (
+      <section className="py-16 bg-slate-50 border-t border-slate-200">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <h3 className="text-2xl font-bold text-center mb-8 text-slate-800">{UI_TEXT[lang].faqTitle}</h3>
+          <div className="space-y-4">
+            {FAQS.map((item, idx) => (
+                <details key={idx} className="group glass-card p-5 rounded-xl shadow-sm cursor-pointer">
+                  <summary className="font-semibold text-slate-700 list-none flex justify-between items-center">
+                    {item.q[lang]}
+                    <span className="transition group-open:rotate-180 text-slate-400"><Icon name="chevron-down" /></span>
+                  </summary>
+                  <p className="text-slate-500 mt-3 text-sm leading-relaxed">{item.a[lang]}</p>
+                </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const PersonnelCard = ({ person, size = "normal", lang }) => {
+      const isLarge = size === "large";
+      const isMedium = size === "medium";
+      const styles = LEVEL_STYLES[person.level] || LEVEL_STYLES.support;
+      const imgHeight = isLarge ? "h-32" : isMedium ? "h-28" : "h-24";
+      const imgWidth = isLarge ? "w-32" : isMedium ? "w-28" : "w-24";
+      const cardWidth = isLarge ? "w-full max-w-md" : "w-full";
+      const textSize = isLarge ? 'text-lg' : 'text-sm';
+
+      return (
+        <div className={`glass-card rounded-2xl overflow-hidden shadow-sm ${styles.shadow} transition-all duration-300 border ${styles.border} flex flex-col items-center ${cardWidth} h-full hover-lift group relative`}>
+          <div className={`h-3 w-full ${styles.header}`}></div>
+          <div className="p-6 flex flex-col items-center w-full flex-grow relative z-10">
+            <div className={`relative mb-4 rounded-full p-1 bg-gradient-to-br ${styles.accent}`}>
+              <div className={`${imgWidth} ${imgHeight} rounded-full overflow-hidden bg-white border-2 border-white`}>
+                <img src={person.image} alt={person.name[lang]} className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+              </div>
+            </div>
+            <div className="text-center mb-3">
+              <h4 className={`font-bold ${styles.text} leading-tight ${textSize}`}>{person.name[lang]}</h4>
+              {person.nickname && person.nickname[lang] && <span className="inline-block mt-1 text-xs text-slate-500 font-medium">({person.nickname[lang]})</span>}
+            </div>
+            <div className="mt-auto w-full text-center">
+                <div className={`inline-block px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold bg-slate-50/80 ${styles.text} border ${styles.border} backdrop-blur-sm leading-tight shadow-sm group-hover:bg-white transition-colors`}>
+                {person.role[lang]}
+              </div>
+              {person.subRole && <p className="text-[10px] text-slate-500 mt-2 leading-tight px-2 font-medium">{person.subRole[lang]}</p>}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const ServiceCard = ({ service, lang }) => {
+      const theme = CATEGORY_THEMES[service.category];
+      const catLabel = lang === 'th' 
+        ? (service.category === 'thai' ? 'แพทย์แผนไทย' : service.category === 'chinese' ? 'แพทย์แผนจีน' : 'Wellness') 
+        : (service.category === 'thai' ? 'Thai Med' : service.category === 'chinese' ? 'Chinese Med' : 'Wellness');
+        
+      const formatPrice = (p) => {
+          if(typeof p === 'object') return p[lang]; // If price is localized object
+          if(p === 'claim') return UI_TEXT[lang].claim;
+          return p === '-' ? '-' : (p + ".-");
+      }
+
+      const durationText = service.duration === 0 
+        ? (lang==='th' ? 'ตามความเหมาะสม' : 'Varies') 
+        : (service.duration === 'varies' ? (lang==='th' ? '1-2 ชั่วโมง' : '1-2 Hours') : `${service.duration} ${UI_TEXT[lang].mins}`);
+
+      return (
+        <div className={`bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border-2 border-transparent ${theme.hoverBorder} group flex flex-col h-full relative hover-lift`}>
+          <div className="relative h-48 overflow-hidden bg-gray-100">
+            <img src={service.image} alt={service.name[lang]} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60"></div>
+            <span className={`absolute top-3 left-3 ${theme.badge} text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm flex items-center gap-1`}><Icon name={theme.icon} size={10} /> {catLabel}</span>
+            {service.tag && <span className="absolute top-3 right-3 bg-white/90 backdrop-blur text-rose-600 text-xs font-bold px-3 py-1 rounded-full shadow-md animate-pulse">{service.tag[lang]}</span>}
+            <div className="absolute bottom-3 left-3 text-white pr-2">
+              <h3 className="font-bold text-lg leading-tight shadow-black drop-shadow-md">{service.name[lang]}</h3>
+              <div className="flex items-center gap-1 text-xs opacity-90 mt-1"><Icon name="clock" size={12} /><span>{durationText}</span></div>
+            </div>
+          </div>
+          <div className="p-4 flex-grow flex flex-col">
+            {(service.description || service.workingHours) && (
+              <div className="mb-3">
+                  {service.description && <p className="text-xs text-slate-500 mb-1">{service.description[lang]}</p>}
+                  {service.workingHours && <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded w-fit"><Icon name="clock" size={10} /> {service.workingHours[lang]}</div>}
+              </div>
+            )}
+            <div className={`mt-auto bg-white rounded-lg p-3 border border-slate-100 shadow-inner relative overflow-hidden`}>
+              <div className={`absolute top-0 left-0 w-full h-1 ${theme.badge} opacity-20`}></div>
+              {service.prices ? (
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">{UI_TEXT[lang].rights.gold}</span><span className="text-sm">{formatPrice(service.prices.gold)}</span></div>
+                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">{UI_TEXT[lang].rights.civil}</span><span className="text-sm">{formatPrice(service.prices.direct)}</span></div>
+                  <div className="flex justify-between items-center py-1 text-slate-500"><span className="text-xs">{UI_TEXT[lang].rights.sso}</span><span className="text-sm">{formatPrice(service.prices.sso)}</span></div>
+                  <div className="border-t border-slate-100 my-1"></div>
+                  <div className="flex justify-between items-center py-1 text-slate-800 font-semibold"><span className="text-xs">{UI_TEXT[lang].rights.self}</span><span className="text-sm">{formatPrice(service.prices.self)}</span></div>
+                </div>
+              ) : service.specialPrice ? (
+                <div className="space-y-2">
+                  {service.specialPrice.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center"><span className="text-xs text-slate-500">{item.label[lang]}</span><span className={`text-lg font-bold ${theme.color}`}>{item.price}</span></div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex justify-between items-center pt-2"><span className="text-sm text-slate-500">{UI_TEXT[lang].rights.self}</span><span className={`text-xl font-bold ${theme.color}`}>{service.singlePrice || "-"}</span></div>
+              )}
+              {service.note && <p className="text-[10px] text-rose-500 mt-2 text-right">* {service.note[lang]}</p>}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // --- Main App ---
+
     function App() {
       const [lang, setLang] = useState("th");
+      const [activeCategory, setActiveCategory] = useState("all");
       const [isMenuOpen, setIsMenuOpen] = useState(false);
+      const [viewCount, setViewCount] = useState(0);
+
+      const toggleLang = () => setLang(prev => prev === "th" ? "en" : "th");
 
       useEffect(() => {
         const loader = document.getElementById('status-container');
         const root = document.getElementById('root');
         if(loader && root) {
-            setTimeout(() => {
-                loader.style.opacity = '0';
-                setTimeout(() => loader.style.display = 'none', 500);
-                root.style.opacity = '1';
-            }, 1000);
+            loader.style.display = 'none';
+            root.style.opacity = '1';
         }
+
+        try {
+          const STORAGE_KEY = 'sadao_ttm_views_v_github'; 
+          const storedCount = localStorage.getItem(STORAGE_KEY);
+          let newCount = storedCount ? parseInt(storedCount) + 1 : 1; 
+          localStorage.setItem(STORAGE_KEY, newCount);
+          setViewCount(newCount);
+        } catch (e) { console.log('LS Error'); }
       }, []);
 
-      const toggleLang = () => setLang(prev => prev === "th" ? "en" : "th");
+      const filteredServices = activeCategory === "all" ? SERVICES : SERVICES.filter(s => s.category === activeCategory);
+      const categoryButtons = [
+          { id: "all", label: UI_TEXT[lang].catAll }, 
+          { id: "thai", label: UI_TEXT[lang].catThai }, 
+          { id: "chinese", label: UI_TEXT[lang].catChinese }, 
+          { id: "wellness", label: UI_TEXT[lang].catWellness }
+      ];
 
       return (
-        <div className="min-h-screen text-slate-200 selection:bg-cyan-500 selection:text-white">
-          <Navbar lang={lang} toggleLang={toggleLang} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-          <Hero lang={lang} />
-          <ElementCheckSection lang={lang} />
-          <TeamSection lang={lang} />
-          <VideoSection lang={lang} />
-          <ContactSection lang={lang} />
+        <div className="min-h-screen font-sans text-slate-800 bg-slate-50">
+          <FloatingContact />
+
+          {/* HEADER */}
+          <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
+            <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <img src={ASSETS.logo} alt="Sadao Hospital Logo" className="h-10 sm:h-12 w-auto object-contain" />
+                <div><h1 className="text-sm sm:text-lg font-bold text-cyan-800 leading-tight">{UI_TEXT[lang].title}</h1><p className="text-[10px] sm:text-xs text-slate-500">{UI_TEXT[lang].subTitle}</p></div>
+              </div>
+               
+              <nav className="hidden md:flex items-center gap-4 lg:gap-8">
+                <a href="#home" onClick={(e) => smoothScrollTo(e, 'home')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuHome}</a>
+                <a href="#team" onClick={(e) => smoothScrollTo(e, 'team')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuTeam}</a>
+                <a href="#services" onClick={(e) => smoothScrollTo(e, 'services')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuService}</a>
+                <a href="#contact" onClick={(e) => smoothScrollTo(e, 'contact')} className="text-slate-600 hover:text-cyan-600 font-medium">{UI_TEXT[lang].menuContact}</a>
+                
+                <button onClick={toggleLang} className="flex items-center gap-1 px-3 py-1 rounded-full border border-slate-300 hover:bg-slate-100 transition-colors text-sm font-bold text-slate-600">
+                    <Icon name="globe" size={16} /> {lang === 'th' ? 'EN' : 'TH'}
+                </button>
+
+                <a href={NEW_QUEUE_LINK} target="_blank" rel="noreferrer" className="btn-glow bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-2 rounded-full font-bold shadow-lg flex items-center gap-2 ring-2 ring-emerald-500/30">
+                  <Icon name="calendar-check" size={18} /> {UI_TEXT[lang].checkQueue}
+                </a>
+              </nav>
+
+              <div className="md:hidden flex items-center gap-3">
+                <button onClick={toggleLang} className="flex items-center gap-1 px-2 py-1 rounded border border-slate-300 text-xs font-bold text-slate-600">
+                    {lang === 'th' ? 'EN' : 'TH'}
+                </button>
+                <button className="text-slate-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <Icon name="x" size={28} /> : <Icon name="menu" size={28} />}</button>
+              </div>
+            </div>
+            
+            {/* Mobile Nav */}
+            {isMenuOpen && (
+              <div className="md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg z-50">
+                <div className="flex flex-col py-4 px-4 space-y-3">
+                  <a href="#home" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'home'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuHome}</a>
+                  <a href="#team" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'team'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuTeam}</a>
+                  <a href="#services" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'services'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuService}</a>
+                  <a href="#contact" className="block text-center text-slate-600 py-2" onClick={(e) => { smoothScrollTo(e, 'contact'); setIsMenuOpen(false); }}>{UI_TEXT[lang].menuContact}</a>
+                  
+                  <a href={NEW_QUEUE_LINK} target="_blank" className="block w-full text-center bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-xl font-bold shadow-md">{UI_TEXT[lang].checkQueue}</a>
+                </div>
+              </div>
+            )}
+          </header>
+
+          <HeroSlider lang={lang} />
+          
+          <VideoIntroduction lang={lang} />
+
+          {/* TEAM SECTION */}
+          <section id="team" className="py-16 bg-white border-b border-slate-100">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h3 className="text-3xl font-bold text-slate-800 mb-2">{UI_TEXT[lang].teamTitle}</h3>
+                <p className="text-slate-500">{UI_TEXT[lang].teamDesc}</p>
+              </div>
+              <div className="flex flex-col items-center gap-10">
+                <div className="w-full max-w-lg flex justify-center">{PERSONNEL.filter(p => p.level === 'director').map(p => <PersonnelCard key={p.id} person={p} size="large" lang={lang} />)}</div>
+                <div className="w-full max-w-xs flex justify-center">{PERSONNEL.filter(p => p.level === 'head').map(p => <PersonnelCard key={p.id} person={p} size="medium" lang={lang} />)}</div>
+                
+                {/* Modified Grid to support 3 doctors */}
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-5xl">
+                    {PERSONNEL.filter(p => p.level === 'doctor').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl">{PERSONNEL.filter(p => p.level === 'support').map(p => <PersonnelCard key={p.id} person={p} lang={lang} />)}</div>
+                <div className="w-full max-w-6xl mt-4">
+                  <div className="glass-card rounded-2xl p-8 border-rose-100 bg-rose-50/30">
+                    <h4 className="text-center text-rose-800 font-bold mb-8 flex items-center justify-center gap-2 text-lg"><Icon name="users" size={24}/> {UI_TEXT[lang].teamAssistant}</h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 justify-items-center">
+                      {PERSONNEL.filter(p => p.level === 'assistant_thai').map(p => (<div key={p.id} className="w-full flex justify-center"><PersonnelCard person={p} lang={lang} /></div>))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* SERVICES SECTION */}
+          <section id="services" className="py-16 md:py-24 bg-slate-50">
+            <div className="container mx-auto px-4">
+              <div className="text-center mb-12">
+                <h3 className="text-3xl font-bold text-slate-800 mb-4">{UI_TEXT[lang].serviceTitle}</h3>
+                <p className="text-slate-500 max-w-xl mx-auto">{UI_TEXT[lang].serviceDesc}</p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
+                {categoryButtons.map(cat => (
+                   <button key={cat.id} onClick={() => setActiveCategory(cat.id)} className={`px-6 py-2.5 rounded-full text-sm md:text-base font-medium transition-all duration-300 shadow-sm hover:-translate-y-1 ${activeCategory === cat.id ? `${CATEGORY_THEMES[cat.id === 'all' ? 'all' : cat.id].btnActive} scale-105` : "bg-white text-slate-600 border border-slate-200 hover:border-cyan-400 hover:text-cyan-600"}`}>
+                      {cat.label}
+                   </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+                {filteredServices.map(service => <ServiceCard key={service.id} service={service} lang={lang} />)}
+              </div>
+              
+              <div className="mt-20 border-t border-slate-200 pt-16">
+                <div className="text-center mb-8">
+                  <span className="bg-gradient-to-r from-red-600 to-amber-500 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg shadow-red-200 inline-flex items-center gap-2 mb-2">
+                    <Icon name="sparkles" size={16} /> TCM
+                  </span>
+                  <h3 className="text-2xl font-bold text-slate-800">{UI_TEXT[lang].knowledgeTitle}</h3>
+                </div>
+                <InfoSlider />
+              </div>
+            </div>
+          </section>
+
+          {/* PROMO SECTION */}
+          <section className="bg-gradient-to-r from-amber-50 to-orange-50 py-16 border-y border-amber-100">
+            <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-center gap-8 text-center md:text-left">
+              <div className="bg-white p-6 rounded-full shadow-xl shadow-amber-200 animate-float"><Icon name="star" size={48} className="text-amber-500 fill-current" /></div>
+              <div><h4 className="text-2xl font-bold text-amber-800 mb-2">{UI_TEXT[lang].promoTitle}</h4><p className="text-amber-700 text-lg">{UI_TEXT[lang].promoDesc} <span className="text-3xl font-bold text-red-600 mx-2">2,600.-</span> {UI_TEXT[lang].promoNormal}</p></div>
+              <a href={CONTACT_INFO.line} target="_blank" className="bg-gradient-to-r from-amber-500 to-orange-500 text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all">{UI_TEXT[lang].menuContact}</a>
+            </div>
+          </section>
+
+          {/* CONTACT SECTION */}
+          <section id="contact" className="py-20 bg-white">
+            <div className="container mx-auto px-4">
+              <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white">
+                <div className="grid md:grid-cols-2">
+                  <div className="p-10 md:p-16 flex flex-col justify-center">
+                    <h3 className="text-3xl font-bold mb-8">{UI_TEXT[lang].contactTitle}</h3>
+                    <div className="space-y-8">
+                      <div className="flex items-start gap-5">
+                        <div className="bg-cyan-500/20 p-3 rounded-lg"><Icon name="map-pin" className="text-cyan-400" size={28} /></div>
+                        <div><h5 className="font-bold text-xl mb-1">{UI_TEXT[lang].locTitle}</h5><p className="text-slate-300 text-lg">{CONTACT_INFO.location[lang]}</p><p className="text-sm font-semibold text-cyan-400 mt-1 bg-cyan-900/30 px-2 py-1 rounded w-fit">{UI_TEXT[lang].locDesc}</p></div>
+                      </div>
+                      <div className="flex items-start gap-5">
+                        <div className="bg-cyan-500/20 p-3 rounded-lg"><Icon name="clock" className="text-cyan-400" size={28} /></div>
+                        <div className="w-full">
+                          <h5 className="font-bold text-xl mb-3">{UI_TEXT[lang].timeTitle}</h5>
+                          <div className="mb-4 pl-4 border-l-2 border-emerald-500"><span className="block text-emerald-400 font-bold mb-1">{UI_TEXT[lang].timeThai}</span><p className="text-slate-300 text-sm whitespace-pre-line">{UI_TEXT[lang].timeThaiDesc}</p></div>
+                          <div className="pl-4 border-l-2 border-amber-500"><span className="block text-amber-400 font-bold mb-1">{UI_TEXT[lang].timeChinese}</span><p className="text-slate-300 text-sm whitespace-pre-line">{UI_TEXT[lang].timeChineseDesc}</p></div>
+                          <p className="text-xs text-green-400 mt-2 flex items-center gap-1"><Icon name="check-circle" size={12} /> {UI_TEXT[lang].canBook}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-5">
+                        <div className="bg-cyan-500/20 p-3 rounded-lg"><Icon name="phone" className="text-cyan-400" size={28} /></div>
+                        <div><h5 className="font-bold text-xl mb-1">{UI_TEXT[lang].phoneTitle}</h5><p className="text-slate-300 text-lg">{CONTACT_INFO.phone1}</p><p className="text-slate-300 text-lg">{CONTACT_INFO.phone2}</p></div>
+                      </div>
+                    </div>
+                    <div className="mt-12 flex flex-wrap gap-4">
+                      <SocialButton href={CONTACT_INFO.facebook} iconName="facebook" colorClass="bg-[#1877F2] hover:bg-blue-600" label="Facebook" />
+                      <SocialButton href={CONTACT_INFO.line} customIcon={<img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" className="w-5 h-5 bg-white rounded p-0.5" alt="Line"/>} colorClass="bg-[#00C300] hover:bg-green-600" label="LINE" />
+                      <SocialButton href={CONTACT_INFO.tiktok} customIcon={<span className="font-bold text-lg leading-none">Tk</span>} colorClass="bg-black hover:bg-gray-800" label="TikTok" />
+                      <SocialButton href={CONTACT_INFO.youtube} iconName="youtube" colorClass="bg-[#FF0000] hover:bg-red-700" label="Youtube" />
+                    </div>
+                  </div>
+                  <div className="relative h-80 md:h-auto bg-slate-800">
+                    <img src="https://img5.pic.in.th/file/secure-sv1/2c481a861621360399d9fa5ae5e4522e.png" alt="Atmosphere" className="w-full h-full object-cover opacity-50 mix-blend-overlay" />
+                    <div className="absolute inset-0 flex items-center justify-center p-10 text-center">
+                        <div><Icon name="info" size={64} className="mx-auto mb-6 text-cyan-400 animate-pulse"/><p className="text-xl font-light italic">{UI_TEXT[lang].motto}</p></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <FAQSection lang={lang} />
+
+          <footer className="bg-slate-900 text-slate-400 py-10 text-center text-sm border-t border-slate-800 relative z-10">
+            <div className="container mx-auto px-4">
+                <img src={ASSETS.logo} alt="Logo" className="h-12 mx-auto mb-6 opacity-80 grayscale hover:grayscale-0 transition-all"/>
+                <p className="text-lg mb-2 text-slate-300">© 2025 {UI_TEXT[lang].title} {UI_TEXT[lang].subTitle}</p>
+                <p className="text-xs text-slate-600 mb-6">Designed and Developed by Mr.Tossaporn Khongsuknirun</p>
+                <div className="flex items-center justify-center gap-2 text-xs bg-slate-800/50 py-2 px-4 rounded-full w-fit mx-auto border border-slate-700">
+                  <Icon name="users" size={14} className="text-emerald-400" />
+                  <span>Views: <span className="font-mono font-bold text-emerald-400 text-base ml-1">{viewCount.toLocaleString()}</span></span>
+                </div>
+            </div>
+          </footer>
         </div>
       );
     }
@@ -512,3 +734,5 @@
   </script>
 </body>
 </html>
+
+
